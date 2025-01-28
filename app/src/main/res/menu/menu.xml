@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mAfegirPizza"
+        android:icon="@drawable/baseline_add_24"
+        android:title="addPizza"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/mFiltrar"
+        android:title="FILTRAR"
+        app:showAsAction="always" >
+        <menu >
+            <item
+                android:id="@+id/mPizzes"
+                android:title="Pizzes" />
+            <item
+                android:id="@+id/mPizzesVeganes"
+                android:title="Pizzes veganes" />
+            <item
+                android:id="@+id/mPizzesCeliacas"
+                android:title="Pizzes celíaques" />
+            <item
+                android:id="@+id/mToppings"
+                android:title="Toppings" />
+            <item
+                android:id="@+id/mDescripcio"
+                android:title="Descripció" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/mOrdenar"
+        android:title="ORDENAR"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/mOrdenarAZ"
+                android:title="A-Z" />
+            <item
+                android:id="@+id/mOrdenarZA"
+                android:title="Z-A" />
+        </menu>
+    </item>
+</menu>

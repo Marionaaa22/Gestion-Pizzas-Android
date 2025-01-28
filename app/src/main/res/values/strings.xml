@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Gestio_pizzas_room</string>
+    <string-array name="pizza_types">
+        <item>PIZZA</item>
+        <item>PIZZA VEGANA</item>
+        <item>PIZZA CELIACA</item>
+        <item>TOPPING</item>
+    </string-array>
+</resources>

@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+
         }
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)

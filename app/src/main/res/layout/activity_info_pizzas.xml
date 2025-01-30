@@ -46,7 +46,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textVeiw"
+                    android:id="@+id/tvReferencia"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -89,12 +89,12 @@
                     android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/tvPreu"
+                    android:id="@+id/tvPreuSense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Preu sense IVA"
-                    android:textColor="@color/black" />
+                    android:text="Preu sense IVA" />
+
             </LinearLayout>
 
             <ImageView

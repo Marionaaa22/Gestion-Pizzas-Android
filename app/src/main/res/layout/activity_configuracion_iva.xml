@@ -11,29 +11,47 @@
         android:id="@+id/textView3"
         android:layout_width="306dp"
         android:layout_height="55dp"
+        android:layout_marginTop="152dp"
         android:autoSizeTextType="uniform"
         android:text="Introdueix el IVA"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="158dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/inputIVA"
         android:layout_width="298dp"
         android:layout_height="45dp"
+        android:layout_marginTop="96dp"
         android:hint="Preu"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="262dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
         android:id="@+id/btnGuardarIVA"
         android:layout_width="231dp"
         android:layout_height="59dp"
+        android:layout_marginTop="88dp"
         android:text="Guardar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="359dp" />
+        app:layout_constraintTop_toBottomOf="@+id/inputIVA"
+        app:layout_constraintVertical_bias="0.05" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

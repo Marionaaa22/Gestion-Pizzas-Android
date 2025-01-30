@@ -42,4 +42,9 @@
                 android:title="Z-A" />
         </menu>
     </item>
+    <item
+        android:id="@+id/mConfiguracio"
+        android:icon="@drawable/conf"
+        android:title="mConfiguracio"
+        app:showAsAction="always" />
 </menu>

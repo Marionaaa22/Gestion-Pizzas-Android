@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Pizzas::class], version = 1)
+@Database(entities = [Pizzas::class], version = 2)
 abstract class PizzasDataBase : RoomDatabase() {
     abstract fun pizzasDao(): PizzasDao
 
@@ -28,18 +28,9 @@ abstract class PizzasDataBase : RoomDatabase() {
                     "pizzas-db"
                 )
                     .fallbackToDestructiveMigration()
-                    .addCallback(PizzesDatabaseCallback(scope))
                     .build()
                 INSTANCE = instance
                 instance
-            }
-        }
-
-        private class PizzesDatabaseCallback(
-            private val scope: CoroutineScope
-        ) : RoomDatabase.Callback() {
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
             }
         }
     }

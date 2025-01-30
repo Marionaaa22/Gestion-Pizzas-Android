@@ -16,7 +16,7 @@ interface PizzasDao {
 
     // Función para insertar una pizza
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(pizzes: Pizzas): Long
+    fun insertPizza(pizzes: Pizzas): Long
 
     // Función para eliminar una pizza
     @Delete
@@ -33,4 +33,12 @@ interface PizzasDao {
     // Función para obtener la última referencia
     @Query("SELECT COALESCE(MAX(referencia), 0) FROM Pizzes")
     fun getLastReferencia(): Long
+
+    //Funcion para que actualizar el IVA
+    @Query("UPDATE Pizzes SET IVA = :iva")
+    fun updateIva(iva: Float)
+
+    //Funcion para obtener el IVA
+    @Query("SELECT IVA FROM Pizzes LIMIT 1")
+    fun getIva(): Float
 }

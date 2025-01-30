@@ -10,4 +10,5 @@ data class Pizzas(
     @ColumnInfo(name = "Descripcio") var despcripcion: String,
     @ColumnInfo (name = "Tipo") var tipos: String,
     @ColumnInfo (name = "Preu") var preuSenseIVA: Float,
+    @ColumnInfo (name = "IVA") var iva: Float,
 )

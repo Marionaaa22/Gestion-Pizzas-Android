@@ -38,9 +38,9 @@ class editarPizzas : AppCompatActivity() {
         val btnGuardar = findViewById<Button>(R.id.btnGuardarEditar)
 
         pizza?.let {
-            tvReferencia.text = "Referencia: ${it.referencia}"
-            etDescripcio.setText(it.descripcio)
-            etPreu.setText(it.preu.toString())
+            tvReferencia.text = "Referencia: ${it.reference}"
+            etDescripcio.setText(it.description)
+            etPreu.setText(it.priceWithoutTax.toString())
 
             btnGuardar.setOnClickListener {
                 val novaDescripcio = etDescripcio.text.toString()
@@ -52,11 +52,11 @@ class editarPizzas : AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val pizzaActualitzada = Pizzas(
-                            referencia = it.referencia,
-                            descripcio = novaDescripcio,
-                            tipo = it.tipo,
-                            preu = nouPreu,
-                            preuIVA = nouPreuIVA
+                            reference = it.reference,
+                            description = novaDescripcio,
+                            type = it.type,
+                            priceWithoutTax = nouPreu,
+                            priceWithTax = nouPreuIVA
                         )
                         pizzaDao.updatePizza(pizzaActualitzada)
 

@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Pizzes")
 data class Pizzas(
-    @PrimaryKey var referencia: String,
-    @ColumnInfo(name = "Descripcio") var despcripcion: String,
-    @ColumnInfo (name = "Tipo") var tipos: String,
-    @ColumnInfo (name = "Preu") var preuSenseIVA: Float,
-    @ColumnInfo (name = "IVA") var iva: Float,
+    @PrimaryKey val referencia: String,
+    val despcripcion: String,
+    val tipos: String,
+    val preuSenseIVA: Float,
+    val iva: Float,
 )

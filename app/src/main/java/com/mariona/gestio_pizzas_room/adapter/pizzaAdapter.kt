@@ -13,59 +13,42 @@ import com.mariona.gestio_pizzas_room.R
 import com.mariona.gestio_pizzas_room.infoPizzas
 import com.mariona.gestio_pizzas_room.room.Pizzas
 
-class pizzaAdapter () : RecyclerView.Adapter<pizzaAdapter.PizzaViewHolder>() {
-
-    var pizzes: MutableList<Pizzas> = ArrayList()
-    lateinit var context: Context
-
-    fun pizzaAdapter(pizzes: MutableList<Pizzas>, context: Context) {
-        this.pizzes = pizzes
-        this.context = context
-    }
-
-    override fun onBindViewHolder(holder: PizzaViewHolder, position: Int) {
-        val item = pizzes.get(position)
-        holder.bind(item, context)
-    }
-
-
+class pizzaAdapter(private val context: Context, var pizzes: MutableList<Pizzas> = mutableListOf()) :
+    RecyclerView.Adapter<pizzaAdapter.PizzaViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PizzaViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return PizzaViewHolder(layoutInflater.inflate(R.layout.activity_info_pizzas, parent, false))
     }
 
-
-    override fun getItemCount(): Int {
-        return pizzes.size
+    override fun onBindViewHolder(holder: PizzaViewHolder, position: Int) {
+        val item = pizzes[position]
+        holder.bind(item)
     }
 
-    inner class PizzaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val cardView: CardView = itemView.findViewById(R.id.cardView)
-        val referencia: TextView = itemView.findViewById(R.id.tvReferencia)
-        val tipo: TextView = itemView.findViewById(R.id.tvTipusPizza)
-        val descripcion: TextView = itemView.findViewById(R.id.tvDescripcioPizza)
-        val precioIVA: TextView = itemView.findViewById(R.id.tvPreu)
-        val precioSinIVA: TextView = itemView.findViewById(R.id.tvPreu)
-        val btnEliminar: Button = itemView.findViewById(R.id.imgEliminar)
+    override fun getItemCount() = pizzes.size
 
-        fun bind(pizza: Pizzas, context: Context) {
+    inner class PizzaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val referencia: TextView = itemView.findViewById(R.id.tvReferencia)
+        private val tipo: TextView = itemView.findViewById(R.id.tvTipusPizza)
+        private val descripcion: TextView = itemView.findViewById(R.id.tvDescripcioPizza)
+        private val precioSinIVA: TextView = itemView.findViewById(R.id.tvPreu)
+
+        fun bind(pizza: Pizzas) {
             referencia.text = "Referencia: ${pizza.referencia}"
             tipo.text = "Tipo: ${pizza.tipos}"
             descripcion.text = "Descripción: ${pizza.despcripcion}"
-            //precioIVA.text = "Precio con IVA: ${pizza.preuIVA}"
             precioSinIVA.text = "Precio sin IVA: ${pizza.preuSenseIVA}"
 
-            cardView.setOnClickListener {
-                val intent = Intent(context, infoPizzas::class.java)
-                intent.putExtra("referencia", pizza.referencia)
-                intent.putExtra("tipos", pizza.tipos)
-                intent.putExtra("despcripcion", pizza.despcripcion)
-                intent.putExtra("preuSenseIVA", pizza.preuSenseIVA)
-                //intent.putExtra("preuIVA", pizza.preuIVA)
+            itemView.setOnClickListener {
+                val intent = Intent(context, infoPizzas::class.java).apply {
+                    putExtra("referencia", pizza.referencia)
+                    putExtra("tipos", pizza.tipos)
+                    putExtra("despcripcion", pizza.despcripcion)
+                    putExtra("preuSenseIVA", pizza.preuSenseIVA)
+                }
                 context.startActivity(intent)
             }
         }
     }
-
 }

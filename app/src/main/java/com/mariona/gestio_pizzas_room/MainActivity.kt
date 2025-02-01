@@ -31,13 +31,6 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // Ajuste de las barras del sistema
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
         // Configuración del Toolbar
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -50,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         // Configuración del RecyclerView y su adaptador
         pizzaRecyclerView = findViewById(R.id.rvDatos) // Asegúrate de tener este RecyclerView en tu layout
-        pizzaAdapter = pizzaAdapter()
+        pizzaAdapter = pizzaAdapter(this)
         pizzaRecyclerView.adapter = pizzaAdapter
 
         // Comprobamos si el IVA está configurado
@@ -124,12 +117,20 @@ class MainActivity : AppCompatActivity() {
 
     // Función para cargar las pizzas en el RecyclerView
     private fun carregarPizzes() {
-        lifecycleScope.launch {
-            val pizzas = withContext(Dispatchers.IO) {
-                pizzaDao.getPizzes() // Obtener las pizzas desde la base de datos
+        lifecycleScope.launch(Dispatchers.IO) {
+            val pizzas = pizzaDao.getPizzes()
+            withContext(Dispatchers.Main) {
+                if (pizzas.isNullOrEmpty()) {
+                    Snackbar.make(
+                        findViewById(R.id.main),
+                        "No hay pizzas disponibles",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                } else {
+                    pizzaAdapter.pizzes = pizzas.toMutableList()
+                    pizzaAdapter.notifyDataSetChanged()
+                }
             }
-            pizzaAdapter.pizzes = pizzas.toMutableList()
-            pizzaAdapter.notifyDataSetChanged() // Notificar al adaptador que los datos han cambiado
         }
     }
 }

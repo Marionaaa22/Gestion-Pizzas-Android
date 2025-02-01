@@ -52,9 +52,9 @@ class editarPizzas : AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val pizzaActualitzada = Pizzas(
-                            referencia = it.reference,
+                            referencia = pizza.reference,
                             descripcion = novaDescripcio,
-                            tipo = it.tipo,
+                            tipo = pizza.tipo,
                             precio = nouPreu,
                             precioIVA = nouPreuIVA
                         )

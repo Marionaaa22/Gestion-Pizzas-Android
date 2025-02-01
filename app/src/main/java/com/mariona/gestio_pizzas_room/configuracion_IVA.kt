@@ -47,8 +47,8 @@ class configuracion_IVA : AppCompatActivity() {
                 CoroutineScope(Dispatchers.IO).launch {
                     val pizzas = pizzaDao.getAllPizzas()
                     pizzas.forEach { pizza ->
-                        val priceWithTax = pizza.preu * (1 + newTax / 100)
-                        pizzaDao.updatePizza(pizza.copy(preuIVA = priceWithTax))
+                        val priceWithTax = pizza.precio * (1 + newTax / 100)
+                        pizzaDao.updatePizza(pizza.copy(precioIVA = priceWithTax))
                     }
 
                     // Notificar a la actividad principal de la actualización

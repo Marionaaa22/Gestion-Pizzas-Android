@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Pizza")
 data class Pizzas(
-    @PrimaryKey val reference: String,
-    val description: String,
-    val type: String,
-    val priceWithoutTax: Double,
-    val priceWithTax: Double
+    @PrimaryKey val referencia: String,
+    val descripcion: String,
+    val tipo: String,
+    val precio: Double,
+    val precioIVA: Double
 ) : Serializable

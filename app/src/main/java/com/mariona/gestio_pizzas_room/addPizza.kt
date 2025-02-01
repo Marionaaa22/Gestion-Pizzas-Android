@@ -13,9 +13,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
+import com.mariona.gestio_pizzas_room.adapter.pizzaAdapter
 import com.mariona.gestio_pizzas_room.room.Pizzas
 import com.mariona.gestio_pizzas_room.room.PizzasDataBase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,6 +28,7 @@ class addPizza : AppCompatActivity() {
     private lateinit var spinner: Spinner
     private lateinit var mainView: View
     private lateinit var database: PizzasDataBase
+    private lateinit var pizzaAdapter: pizzaAdapter  // Adaptador
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +45,9 @@ class addPizza : AppCompatActivity() {
         inputPreu = findViewById(R.id.inputPreu)
         mainView = findViewById(R.id.main)
 
-        database = PizzasDataBase.getDatabase(this, CoroutineScope(Dispatchers.IO))
+        database = PizzasDataBase.getDatabase(this, lifecycleScope)
 
-        spinner  = findViewById(R.id.inputTipo)
+        spinner = findViewById(R.id.inputTipo)
         ArrayAdapter.createFromResource(
             this,
             R.array.pizza_types,
@@ -55,6 +56,9 @@ class addPizza : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
         }
+
+        // Pasar el adaptador al RecyclerView
+        pizzaAdapter = pizzaAdapter(this, mutableListOf(), onDelete = {}, onEdit = {})
 
         findViewById<Button>(R.id.btnGuardar).setOnClickListener {
             if (validarInputs()) {
@@ -147,8 +151,8 @@ class addPizza : AppCompatActivity() {
         val descripcio = inputDescripcio.text.toString().trim()
         val tipus = spinner.selectedItem.toString().trim()
         val preuSenseIVA = inputPreu.text.toString().toFloat()
-        val preuIVA = preuSenseIVA * 1.21.toString().toFloat()
-        val iva = 0.21.toString().toFloat()
+        val preuIVA = preuSenseIVA * 1.21f // Calcula el precio con IVA
+        val iva = 0.21f // El IVA es 21%
 
         val novaPizza = Pizzas(
             referencia = referencia,
@@ -159,13 +163,16 @@ class addPizza : AppCompatActivity() {
             iva = iva
         )
 
-        // Aquí debes lanzar la operación de base de datos en un hilo de fondo (IO thread)
+        // Guardar pizza en la base de datos
         lifecycleScope.launch(Dispatchers.IO) {
-            // Realiza la operación de inserción en el hilo de fondo
+            // Insertamos la nueva pizza en la base de datos
             database.pizzasDao().insertPizza(novaPizza)
 
-            // Después de completar la inserción en la base de datos, volvemos al hilo principal para mostrar el mensaje
+            // Después de insertar la pizza, actualizamos el RecyclerView
             withContext(Dispatchers.Main) {
+                // Agregar la pizza al adaptador
+                pizzaAdapter.pizzaList.add(novaPizza)  // Añadir al modelo de datos
+                pizzaAdapter.notifyItemInserted(pizzaAdapter.pizzaList.size - 1) // Notificar que el ítem ha sido agregado
                 Snackbar.make(mainView, "Pizza afegida correctament!", Snackbar.LENGTH_SHORT).show()
                 clearInputs()
                 finish()
@@ -179,5 +186,5 @@ class addPizza : AppCompatActivity() {
         inputPreu.text.clear()
         spinner.setSelection(0)
     }
-
 }
+

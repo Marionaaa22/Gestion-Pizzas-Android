@@ -25,12 +25,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var pizzaAdapter: pizzaAdapter
 
     // Registro para manejar el resultado de la configuración del IVA
-    val configIvaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            // Cuando el IVA se actualiza, recargamos las pizzas
-            cargarPizzas()
+    val configIvaLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Cuando el IVA se actualiza, recargamos las pizzas
+                cargarPizzas()
+            }
         }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
@@ -53,13 +54,12 @@ class MainActivity : AppCompatActivity() {
 
         // Configuración del RecyclerView y su adaptador
         pizzaRecyclerView = findViewById(R.id.rvDatos)
-        pizzaAdapter = pizzaAdapter(this)
+        pizzaAdapter = pizzaAdapter(this, mutableListOf(), onDelete = {}, onEdit = {})
         pizzaRecyclerView.adapter = pizzaAdapter
 
         // Cargar las pizzas cuando la actividad se crea
         cargarPizzas()
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -69,12 +69,14 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
+
             R.id.mConfiguracio -> {
                 // Configuración del IVA
                 val intent = Intent(this, configuracion_IVA::class.java)
                 configIvaLauncher.launch(intent)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -96,8 +98,9 @@ class MainActivity : AppCompatActivity() {
                         Snackbar.LENGTH_LONG
                     ).show()
                 } else {
-                    pizzaAdapter.pizzes = pizzas.toMutableList()
-                    pizzaAdapter.notifyDataSetChanged()
+                    // Asegúrate de que pizzaAdapter tiene un método setPizzas()
+                    pizzaAdapter.setPizzas(pizzas)
+                    pizzaAdapter.notifyDataSetChanged() // Actualizar el RecyclerView
                 }
             }
         }

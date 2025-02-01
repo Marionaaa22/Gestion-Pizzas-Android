@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Pizza") // Nombre de la tabla
 data class Pizzas(
-    @PrimaryKey val reference: String, // La clave primaria
-    val description: String,
-    val type: String,
-    val priceWithoutTax: Double,
-    val priceWithTax: Double
+    @PrimaryKey val referencia: String, // La clave primaria
+    val descripcio: String,
+    val tipo: String,
+    val preu: Double,
+    val preuIVA: Double
 )

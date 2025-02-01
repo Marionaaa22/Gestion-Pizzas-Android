@@ -1,23 +1,17 @@
 package com.mariona.gestio_pizzas_room
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
-import com.google.android.material.snackbar.Snackbar
 import com.mariona.gestio_pizzas_room.adapter.pizzaAdapter
-import com.mariona.gestio_pizzas_room.room.PizzasDao
 import com.mariona.gestio_pizzas_room.room.AppDatabase
 import com.mariona.gestio_pizzas_room.room.Pizzas
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -39,21 +33,20 @@ class MainActivity : AppCompatActivity() {
         ).build()
 
         // Initialize the adapter
-        adapter = pizzaAdapter(this)
+        adapter = pizzaAdapter(pizzaList, onDelete = { pizza ->
+            // Handle delete action
+        }, onEdit = { pizza ->
+            // Handle edit action
+        })
 
         // Set up the RecyclerView
-        findViewById<RecyclerView>(R.id.recyclerview).apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = this@MainActivity.adapter
-        }
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
         // Load pizzas from the database
         lifecycleScope.launch {
-            val pizzasFromDb = withContext(Dispatchers.IO) {
-                database.pizzaDao().getAllPizzas()
-            }
-            pizzaList.addAll(pizzasFromDb)
-            adapter.notifyDataSetChanged()
+            loadPizzasFromDatabase()
         }
     }
 
@@ -108,10 +101,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private suspend fun loadPizzasFromDatabase() {
+        val pizzasFromDb = withContext(Dispatchers.IO) {
+            database.pizzaDao().getAllPizzas()
+        }
+        pizzaList.clear()
+        pizzaList.addAll(pizzasFromDb)
+        adapter.notifyDataSetChanged()
+    }
+
     private fun filterPizzas(type: String) {
         lifecycleScope.launch {
             val filteredPizzas = withContext(Dispatchers.IO) {
-                database.pizzaDao().getLastReferenceByType(type)
+                database.pizzaDao().getPizzasByType(type)
             }
             pizzaList.clear()
             pizzaList.addAll(filteredPizzas)

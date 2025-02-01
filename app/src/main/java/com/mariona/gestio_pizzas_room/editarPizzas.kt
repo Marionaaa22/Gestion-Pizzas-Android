@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
 import com.mariona.gestio_pizzas_room.room.Pizzas
+import com.mariona.gestio_pizzas_room.room.PizzasDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,44 +28,45 @@ class editarPizzas : AppCompatActivity() {
         pizzaDao = database.pizzaDao()
         sharedPreferences = getSharedPreferences("PizzaPreferences", Context.MODE_PRIVATE)
 
-        val reference = intent.getStringExtra("REFERENCE")
+        val referencia = intent.getStringExtra("REFERENCIA")
         val pizza = intent.getParcelableExtra<Pizzas>("PIZZA")
 
-        val tvReference = findViewById<TextView>(R.id.tv_reference)
-        val etDescription = findViewById<EditText>(R.id.editarDescripcion)
-        val etPrice = findViewById<EditText>(R.id.editarIva)
-        val btnSave = findViewById<Button>(R.id.btnGuardarEditar)
+        val tvReferencia = findViewById<TextView>(R.id.tv_reference)
+        val etDescripcio = findViewById<EditText>(R.id.editarDescripcion)
+        val etPreu = findViewById<EditText>(R.id.editarIva)
+        val btnGuardar = findViewById<Button>(R.id.btnGuardarEditar)
 
         pizza?.let {
-            tvReference.text = "Referencia: ${it.reference}"
-            etDescription.setText(it.description)
-            etPrice.setText(it.priceWithoutTax.toString())
+            tvReferencia.text = "Referencia: ${it.referencia}"
+            etDescripcio.setText(it.descripcio)
+            etPreu.setText(it.preu.toString())
 
-            btnSave.setOnClickListener {
-                val newDescription = etDescription.text.toString()
-                val newPriceWithoutTax = etPrice.text.toString().toDoubleOrNull()
+            btnGuardar.setOnClickListener {
+                val novaDescripcio = etDescripcio.text.toString()
+                val nouPreu = etPreu.text.toString().toDoubleOrNull()
 
-                if (newPriceWithoutTax != null) {
-                    val taxRate = sharedPreferences.getFloat("taxRate", 21f)
-                    val newPriceWithTax = newPriceWithoutTax * (1 + taxRate / 100)
+                if (nouPreu != null) {
+                    val tipusIva = sharedPreferences.getFloat("tipusIva", 21f)
+                    val nouPreuIVA = nouPreu * (1 + tipusIva / 100)
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        val updatedPizza = Pizzas(
-                            reference = it.reference,
-                            description = newDescription,
-                            type = it.type,
-                            priceWithoutTax = newPriceWithoutTax,
-                            priceWithTax = newPriceWithTax
+                        val pizzaActualitzada = Pizzas(
+                            referencia = it.referencia,
+                            descripcio = novaDescripcio,
+                            tipo = it.tipo,
+                            preu = nouPreu,
+                            preuIVA = nouPreuIVA
                         )
-                        pizzaDao.updatePizza(updatedPizza)
+                        pizzaDao.updatePizza(pizzaActualitzada)
 
-                        // Pass the result back to the main activity
                         val resultIntent = Intent().apply {
-                            putExtra("UPDATED_PIZZA", updatedPizza)
+                            putExtra("UPDATED_PIZZA", pizzaActualitzada)
                         }
                         setResult(Activity.RESULT_OK, resultIntent)
                         finish()
                     }
+                } else {
+                    etPreu.error = "Introduce un valor válido para el precio"
                 }
             }
         }

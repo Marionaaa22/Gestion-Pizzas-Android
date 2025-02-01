@@ -47,8 +47,8 @@ class configuracion_IVA : AppCompatActivity() {
                 CoroutineScope(Dispatchers.IO).launch {
                     val pizzas = pizzaDao.getAllPizzas()
                     pizzas.forEach { pizza ->
-                        val priceWithTax = pizza.priceWithoutTax * (1 + newTax / 100)
-                        pizzaDao.updatePizza(pizza.copy(priceWithTax = priceWithTax))
+                        val priceWithTax = pizza.preu * (1 + newTax / 100)
+                        pizzaDao.updatePizza(pizza.copy(preuIVA = priceWithTax))
                     }
 
                     // Notificar a la actividad principal de la actualización
@@ -61,7 +61,8 @@ class configuracion_IVA : AppCompatActivity() {
             } else {
                 // Mostrar un mensaje de error si el IVA no es válido
                 runOnUiThread {
-                    Toast.makeText(this, "Por favor, ingrese un valor válido para el IVA", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Por favor, ingrese un valor válido para el IVA", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }

@@ -13,13 +13,13 @@ interface PizzasDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPizza(pizza: Pizzas)
 
-    @Query("SELECT * FROM Pizza ORDER BY reference ASC")
+    @Query("SELECT * FROM Pizza ORDER BY referencia ASC")
     fun getAllPizzas(): MutableList<Pizzas>
 
-    @Query("SELECT reference FROM Pizza WHERE type = :type ORDER BY reference DESC LIMIT 1")
+    @Query("SELECT referencia FROM Pizza WHERE tipo = :type ORDER BY referencia DESC LIMIT 1")
     fun getLastReferenceByType(type: String): String?
 
-    @Query("SELECT * FROM Pizza WHERE reference = :reference LIMIT 1")
+    @Query("SELECT * FROM Pizza WHERE referencia = :reference LIMIT 1")
     fun getPizzaByReference(reference: String): Pizzas?
     @Delete
     fun deletePizza(pizza: Pizzas)

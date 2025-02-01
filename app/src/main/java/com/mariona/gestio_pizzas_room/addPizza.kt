@@ -91,8 +91,9 @@ class addPizza : AppCompatActivity() {
                 database.pizzaDao().insertPizza(pizza)
                 runOnUiThread {
                     // Pasar el resultado de vuelta a la actividad principal
-                    val resultIntent = Intent()
-                    resultIntent.putExtra("NEW_PIZZA", pizza)
+                    val resultIntent = Intent().apply {
+                        putExtra("UPDATED_PIZZA", updatePizza)
+                    }
                     setResult(Activity.RESULT_OK, resultIntent)
                     finish()
                 }

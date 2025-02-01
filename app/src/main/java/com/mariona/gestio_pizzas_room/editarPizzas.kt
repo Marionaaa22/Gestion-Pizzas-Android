@@ -15,6 +15,7 @@ import com.mariona.gestio_pizzas_room.room.PizzasDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.Serializable
 
 class editarPizzas : AppCompatActivity() {
     private lateinit var pizzaDao: PizzasDao
@@ -25,12 +26,11 @@ class editarPizzas : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_pizzas)
 
-        val database = Room.databaseBuilder(applicationContext, AppDB::class.java, "pizza-database").build()
         pizzaDao = database.pizzaDao()
         sharedPreferences = getSharedPreferences("PizzaPreferences", Context.MODE_PRIVATE)
 
         val referencia = intent.getStringExtra("REFERENCIA")
-        val pizza = intent.getParcelableExtra<Pizzas>("PIZZA")
+        val pizza = intent.getSerializableExtra("PIZZA") as? Pizzas
 
         val tvReferencia = findViewById<TextView>(R.id.tv_reference)
         val etDescripcio = findViewById<EditText>(R.id.editarDescripcion)
@@ -61,7 +61,7 @@ class editarPizzas : AppCompatActivity() {
                         pizzaDao.updatePizza(pizzaActualitzada)
 
                         val resultIntent = Intent().apply {
-                            putExtra("UPDATED_PIZZA", pizzaActualitzada)
+                            putExtra("UPDATED_PIZZA", pizzaActualitzada as Serializable)
                         }
                         setResult(Activity.RESULT_OK, resultIntent)
                         finish()

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.mariona.gestio_pizzas_room.adapter.pizzaAdapter
-import com.mariona.gestio_pizzas_room.room.AppDB
 import com.mariona.gestio_pizzas_room.room.Pizzas
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -87,7 +86,7 @@ class MainActivity : AppCompatActivity() {
     private fun filterPizzas(type: String) {
         lifecycleScope.launch {
             val filteredPizzas = withContext(Dispatchers.IO) {
-                database.pizzaDao().getPizzasByType(type)
+                database.pizzaDao().getLastReferenceByType(type)
             }
             pizzaList.clear()
             pizzaList.addAll(filteredPizzas)

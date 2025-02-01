@@ -1,15 +1,14 @@
 package com.mariona.gestio_pizzas_room.room
 
-import android.os.Parcelable
-import androidx.room.ColumnInfo
+import java.io.Serializable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Pizza") // Nombre de la tabla
+@Entity(tableName = "Pizza")
 data class Pizzas(
-    @PrimaryKey val referencia: String, // La clave primaria
-    val descripcio: String,
-    val tipo: String,
-    val preu: Double,
-    val preuIVA: Double
-)
+    @PrimaryKey val reference: String,
+    val description: String,
+    val type: String,
+    val priceWithoutTax: Double,
+    val priceWithTax: Double
+) : Serializable

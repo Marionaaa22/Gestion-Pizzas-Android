@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
+
 @Dao
 interface PizzasDao {
 
@@ -33,6 +33,4 @@ interface PizzasDao {
     // Función para obtener el IVA
     @Query("SELECT iva FROM Pizzes WHERE referencia = 0 LIMIT 1")
     fun getIva(): Float
-
-
 }

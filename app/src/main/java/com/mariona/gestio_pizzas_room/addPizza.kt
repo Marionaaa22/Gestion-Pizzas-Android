@@ -159,12 +159,17 @@ class addPizza : AppCompatActivity() {
             iva = iva
         )
 
-        lifecycleScope.launch {
+        // Aquí debes lanzar la operación de base de datos en un hilo de fondo (IO thread)
+        lifecycleScope.launch(Dispatchers.IO) {
+            // Realiza la operación de inserción en el hilo de fondo
             database.pizzasDao().insertPizza(novaPizza)
-            Snackbar.make(mainView, "Pizza afegida correctament!",
-                Snackbar.LENGTH_SHORT).show()
-            clearInputs()
-            finish()
+
+            // Después de completar la inserción en la base de datos, volvemos al hilo principal para mostrar el mensaje
+            withContext(Dispatchers.Main) {
+                Snackbar.make(mainView, "Pizza afegida correctament!", Snackbar.LENGTH_SHORT).show()
+                clearInputs()
+                finish()
+            }
         }
     }
 

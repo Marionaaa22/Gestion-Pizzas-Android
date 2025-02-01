@@ -10,11 +10,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
-import com.google.android.material.snackbar.Snackbar
 import com.mariona.gestio_pizzas_room.room.PizzasDao
-import com.mariona.gestio_pizzas_room.room.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,10 +31,10 @@ class configuracion_IVA : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("PizzaPreferences", Context.MODE_PRIVATE)
 
         val currentTax = sharedPreferences.getFloat("taxRate", 21f) // IVA predeterminado al 21%
-        findViewById<TextView>(R.id.tv_current_tax).text = "IVA actual: $currentTax%"
+        findViewById<TextView>(R.id.tvIvaActual).text = "IVA actual: $currentTax%"
 
-        val etNewTax = findViewById<EditText>(R.id.et_new_tax)
-        val btnSave = findViewById<Button>(R.id.btn_save_tax)
+        val etNewTax = findViewById<EditText>(R.id.nouIva)
+        val btnSave = findViewById<Button>(R.id.btnGuardarIva)
 
         btnSave.setOnClickListener {
             val newTax = etNewTax.text.toString().toFloatOrNull()

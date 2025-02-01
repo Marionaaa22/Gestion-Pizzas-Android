@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <Spinner
-        android:id="@+id/spinner_type"
+        android:id="@+id/spinnerTipo"
         android:layout_width="411dp"
         android:layout_height="62dp"
         android:entries="@array/pizza_types"
@@ -18,29 +18,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/et_description"
+        android:id="@+id/inputDescripcio"
         android:layout_width="406dp"
         android:layout_height="77dp"
         android:layout_marginTop="2dp"
         android:hint="Descripción"
-        app:layout_constraintBottom_toTopOf="@+id/et_price"
+        app:layout_constraintBottom_toTopOf="@+id/inputPrecio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_type" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTipo" />
 
     <EditText
-        android:id="@+id/et_price"
+        android:id="@+id/inputPrecio"
         android:layout_width="403dp"
         android:layout_height="78dp"
         android:hint="Precio"
         android:inputType="numberDecimal"
-        app:layout_constraintBottom_toTopOf="@+id/et_referencia"
+        app:layout_constraintBottom_toTopOf="@+id/inputReferencia"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.375"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline8" />
+        app:layout_constraintTop_toTopOf="@+id/guideline8"
+        app:layout_constraintVertical_bias="0.4" />
 
     <EditText
-        android:id="@+id/et_referencia"
+        android:id="@+id/inputReferencia"
         android:layout_width="403dp"
         android:layout_height="78dp"
         android:hint="Referencia"
@@ -50,14 +52,14 @@
         app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
     <Button
-        android:id="@+id/btn_save"
+        android:id="@+id/btnGuardarPizza"
         android:layout_width="167dp"
         android:layout_height="71dp"
         android:layout_marginTop="56dp"
         android:text="Guardar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_referencia" />
+        app:layout_constraintTop_toBottomOf="@+id/inputReferencia" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"

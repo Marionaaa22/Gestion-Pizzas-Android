@@ -8,17 +8,17 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tv_current_tax"
+        android:id="@+id/tvIvaActual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="IVA actual: 21%"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/et_new_tax"
+        app:layout_constraintBottom_toTopOf="@+id/nouIva"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/et_new_tax"
+        android:id="@+id/nouIva"
         android:layout_width="381dp"
         android:layout_height="69dp"
         android:hint="Introduce el nuevo IVA (%)"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_save_tax"
+        android:id="@+id/btnGuardarIva"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Guardar IVA"

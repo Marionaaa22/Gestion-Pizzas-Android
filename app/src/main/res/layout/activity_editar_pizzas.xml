@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/et_edit_description"
+        android:id="@+id/editarDescripcion"
         android:layout_width="394dp"
         android:layout_height="59dp"
         android:hint="Descripción"
@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline10" />
 
     <EditText
-        android:id="@+id/et_edit_price"
+        android:id="@+id/editarIva"
         android:layout_width="394dp"
         android:layout_height="65dp"
         android:hint="Precio sin IVA"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline11" />
 
     <Button
-        android:id="@+id/btn_save_changes"
+        android:id="@+id/btnGuardarEditar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

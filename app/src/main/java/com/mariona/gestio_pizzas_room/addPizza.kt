@@ -4,27 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
-import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
-import com.google.android.material.snackbar.Snackbar
-import com.mariona.gestio_pizzas_room.adapter.pizzaAdapter
 import com.mariona.gestio_pizzas_room.room.Pizzas
-import com.mariona.gestio_pizzas_room.room.PizzasDataBase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class addPizza : AppCompatActivity() {
 
@@ -36,11 +25,11 @@ class addPizza : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_pizza)
 
-        val spinner = findViewById<Spinner>(R.id.spinner_type)
-        val etDescription = findViewById<EditText>(R.id.et_description)
-        val etPrice = findViewById<EditText>(R.id.et_price)
-        val etReference = findViewById<EditText>(R.id.et_referencia)
-        val btnSave = findViewById<Button>(R.id.btn_save)
+        val spinner = findViewById<Spinner>(R.id.spinnerTipo)
+        val etDescription = findViewById<EditText>(R.id.inputDescripcio)
+        val etPrice = findViewById<EditText>(R.id.inputPrecio)
+        val etReference = findViewById<EditText>(R.id.inputReferencia)
+        val btnSave = findViewById<Button>(R.id.btnGuardarPizza)
 
         btnSave.setOnClickListener {
             // Obtener los datos del usuario

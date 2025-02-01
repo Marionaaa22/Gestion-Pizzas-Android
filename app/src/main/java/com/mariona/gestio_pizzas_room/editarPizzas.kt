@@ -8,10 +8,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.room.Room
 import com.mariona.gestio_pizzas_room.room.Pizzas
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class editarPizzas : AppCompatActivity() {
-    private lateinit var pizzaDao: PizzaDao
+    private lateinit var pizzaDao: PizzasDao
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,12 +28,12 @@ class editarPizzas : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("PizzaPreferences", Context.MODE_PRIVATE)
 
         val reference = intent.getStringExtra("REFERENCE")
-        val pizza = intent.<Pizzas>("PIZZA")
+        val pizza = intent.getParcelableExtra<Pizzas>("PIZZA")
 
         val tvReference = findViewById<TextView>(R.id.tv_reference)
-        val etDescription = findViewById<EditText>(R.id.et_edit_description)
-        val etPrice = findViewById<EditText>(R.id.et_edit_price)
-        val btnSave = findViewById<Button>(R.id.btn_save_changes)
+        val etDescription = findViewById<EditText>(R.id.editarDescripcion)
+        val etPrice = findViewById<EditText>(R.id.editarIva)
+        val btnSave = findViewById<Button>(R.id.btnGuardarEditar)
 
         pizza?.let {
             tvReference.text = "Referencia: ${it.reference}"
@@ -53,15 +50,15 @@ class editarPizzas : AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val updatedPizza = Pizzas(
-                            reference = pizza.reference,
+                            reference = it.reference,
                             description = newDescription,
-                            type = pizza.type,
+                            type = it.type,
                             priceWithoutTax = newPriceWithoutTax,
                             priceWithTax = newPriceWithTax
                         )
                         pizzaDao.updatePizza(updatedPizza)
 
-                        // Pasar el resultado de vuelta a la actividad principal
+                        // Pass the result back to the main activity
                         val resultIntent = Intent().apply {
                             putExtra("UPDATED_PIZZA", updatedPizza)
                         }
@@ -70,7 +67,6 @@ class editarPizzas : AppCompatActivity() {
                     }
                 }
             }
-
         }
     }
 }

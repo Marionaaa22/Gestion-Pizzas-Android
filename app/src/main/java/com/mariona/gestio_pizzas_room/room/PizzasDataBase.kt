@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Pizzas::class], version = 1)
+@Database(entities = [Pizzas::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun pizzaDao(): PizzasDao
 

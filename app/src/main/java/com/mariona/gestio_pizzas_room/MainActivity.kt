@@ -31,6 +31,11 @@ class MainActivity : AppCompatActivity() {
             AppDB::class.java, "pizza-database"
         ).build()
 
+        // Set up the toolbar
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.menu)
+        setSupportActionBar(toolbar)
+
+
         // Initialize the adapter
         adapter = pizzaAdapter(pizzaList, onDelete = { pizza ->
             deletePizza(pizza)

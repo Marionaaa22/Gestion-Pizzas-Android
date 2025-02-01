@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import java.io.Serializable
 
 class editarPizzas : AppCompatActivity() {
-    private lateinit var pizzaDao: PizzasDao
+    /*private lateinit var pizzaDao: PizzasDao
     private lateinit var sharedPreferences: SharedPreferences
     val database = Room.databaseBuilder(applicationContext, AppDB::class.java, "pizza-database").build()
 
@@ -52,7 +52,7 @@ class editarPizzas : AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val pizzaActualitzada = Pizzas(
-                            referencia = pizza.reference,
+                            referencia = it.reference,
                             descripcion = novaDescripcio,
                             tipo = pizza.tipo,
                             precio = nouPreu,
@@ -71,5 +71,5 @@ class editarPizzas : AppCompatActivity() {
                 }
             }
         }
-    }
+    }*/
 }

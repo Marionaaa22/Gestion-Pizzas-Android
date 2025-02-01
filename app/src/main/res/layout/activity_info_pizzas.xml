@@ -22,7 +22,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline5"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/tvRef"
+                app:layout_constraintStart_toEndOf="@+id/tvReferencia"
                 app:layout_constraintTop_toTopOf="@+id/guideline4"
                 app:layout_constraintVertical_bias="1.0" />
 
@@ -35,12 +35,12 @@
                 app:layout_constraintBottom_toTopOf="@+id/guideline4"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/tvRef"
+                app:layout_constraintStart_toEndOf="@+id/tvReferencia"
                 app:layout_constraintTop_toTopOf="@+id/guideline3"
                 app:layout_constraintVertical_bias="1.0" />
 
             <TextView
-                android:id="@+id/tvRef"
+                android:id="@+id/tvReferencia"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="center"
@@ -51,7 +51,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvTipus"
+                android:id="@+id/tvTipo"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="center"
@@ -78,6 +78,7 @@
                 android:layout_height="56dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toTopOf="@+id/guideline4"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/baseline_delete_24" />
@@ -139,7 +140,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/guideline3"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/tvRef"
+                app:layout_constraintStart_toEndOf="@+id/tvReferencia"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
 
@@ -158,8 +159,11 @@
 
             <TextView
                 android:id="@+id/iva"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:autoSizeTextType="none"
+                android:autoText="false"
+                android:gravity="center"
                 android:text="TextView"
                 app:layout_constraintBottom_toTopOf="@+id/guideline3"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -168,8 +172,10 @@
 
             <TextView
                 android:id="@+id/sesnseiva"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:autoSizeTextType="none"
+                android:gravity="center"
                 android:text="TextView"
                 app:layout_constraintBottom_toTopOf="@+id/guideline4"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.mariona.gestio_pizzas_room.adapter.pizzaAdapter
-import com.mariona.gestio_pizzas_room.room.AppDatabase
+import com.mariona.gestio_pizzas_room.room.AppDB
 import com.mariona.gestio_pizzas_room.room.Pizzas
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: pizzaAdapter
     private val pizzaList = mutableListOf<Pizzas>()
-    private lateinit var database: AppDatabase
+    private lateinit var database: AppDB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +29,14 @@ class MainActivity : AppCompatActivity() {
         // Initialize the database
         database = Room.databaseBuilder(
             applicationContext,
-            AppDatabase::class.java, "pizza-database"
+            AppDB::class.java, "pizza-database"
         ).build()
 
         // Initialize the adapter
         adapter = pizzaAdapter(pizzaList, onDelete = { pizza ->
-            // Handle delete action
+            deletePizza(pizza)
         }, onEdit = { pizza ->
-            // Handle edit action
+            editPizza(pizza)
         })
 
         // Set up the RecyclerView
@@ -67,34 +67,8 @@ class MainActivity : AppCompatActivity() {
                 filterPizzas("PIZZA")
                 return true
             }
-            R.id.mPizzesVeganes -> {
-                filterPizzas("PIZZA VEGANA")
-                return true
-            }
-            R.id.mPizzesCeliacas -> {
-                filterPizzas("PIZZA CELIACA")
-                return true
-            }
-            R.id.mToppings -> {
-                filterPizzas("TOPPING")
-                return true
-            }
-            R.id.mDescripcio -> {
-                sortPizzasByDescription()
-                return true
-            }
-            R.id.mOrdenar -> return true
             R.id.mOrdenarAZ -> {
                 sortPizzas(true)
-                return true
-            }
-            R.id.mOrdenarZA -> {
-                sortPizzas(false)
-                return true
-            }
-            R.id.mConfiguracio -> {
-                val intent = Intent(this, configuracion_IVA::class.java)
-                startActivity(intent)
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -121,16 +95,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sortPizzas(ascending: Boolean) {
-        pizzaList.sortBy { it.description }
-        if (!ascending) {
-            pizzaList.reverse()
+    private fun deletePizza(pizza: Pizzas) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                database.pizzaDao().deletePizza(pizza)
+            }
+            pizzaList.remove(pizza)
+            adapter.notifyDataSetChanged()
         }
-        adapter.notifyDataSetChanged()
     }
 
-    private fun sortPizzasByDescription() {
-        pizzaList.sortBy { it.description }
+    private fun editPizza(pizza: Pizzas) {
+        val intent = Intent(this, editarPizzas::class.java).apply {
+            putExtra("PIZZA", pizza)
+        }
+        startActivity(intent)
+    }
+
+    private fun sortPizzas(ascending: Boolean) {
+        pizzaList.sortBy { it.descripcio }
+        if (!ascending) pizzaList.reverse()
         adapter.notifyDataSetChanged()
     }
 }

@@ -90,10 +90,7 @@ class addPizza : AppCompatActivity() {
                 // Si la referencia no existe, continúa guardando la pizza
                 database.pizzaDao().insertPizza(pizza)
                 runOnUiThread {
-                    // Pasar el resultado de vuelta a la actividad principal
-                    val resultIntent = Intent().apply {
-                        putExtra("UPDATED_PIZZA", updatePizza)
-                    }
+                    val resultIntent = Intent()
                     setResult(Activity.RESULT_OK, resultIntent)
                     finish()
                 }

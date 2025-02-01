@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 class editarPizzas : AppCompatActivity() {
     private lateinit var pizzaDao: PizzasDao
     private lateinit var sharedPreferences: SharedPreferences
+    val database = Room.databaseBuilder(applicationContext, AppDB::class.java, "pizza-database").build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -5,20 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.mariona.gestio_pizzas_room.adapter.pizzaAdapter
 import com.mariona.gestio_pizzas_room.room.PizzasDao
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import com.mariona.gestio_pizzas_room.room.PizzasDataBase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,9 +24,16 @@ class MainActivity : AppCompatActivity() {
     lateinit var pizzaDao: PizzasDao
     lateinit var pizzaAdapter: pizzaAdapter
 
+    // Registro para manejar el resultado de la configuración del IVA
+    val configIvaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            // Cuando el IVA se actualiza, recargamos las pizzas
+            cargarPizzas()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
         // Configuración del Toolbar
@@ -42,33 +47,12 @@ class MainActivity : AppCompatActivity() {
         pizzaDao = db.pizzasDao()
 
         // Configuración del RecyclerView y su adaptador
-        pizzaRecyclerView = findViewById(R.id.rvDatos) // Asegúrate de tener este RecyclerView en tu layout
+        pizzaRecyclerView = findViewById(R.id.rvDatos)
         pizzaAdapter = pizzaAdapter(this)
         pizzaRecyclerView.adapter = pizzaAdapter
 
-        // Comprobamos si el IVA está configurado
-        lifecycleScope.launch {
-            val ivaValue = pizzaDao.getIva() // Verifica si el IVA está configurado
-
-            if (ivaValue == null) {
-                // Si el IVA no está configurado, mostramos el Snackbar
-                withContext(Dispatchers.Main) {
-                    Snackbar.make(
-                        findViewById(R.id.main), // Aquí puedes cambiar el view donde se mostrará el Snackbar
-                        "Debe configurar el IVA antes de agregar una pizza",
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-            }
-        }
-
-        // Registrar el lanzador para la actividad de configuración IVA
-        val configIvaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                // Cuando el IVA se actualiza, recargamos las pizzas
-                carregarPizzes()
-            }
-        }
+        // Cargar las pizzas cuando la actividad se crea
+        cargarPizzas()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -79,31 +63,15 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.mAfegirPizza -> {
-                // Verificamos si el IVA está configurado antes de permitir agregar una pizza
-                lifecycleScope.launch {
-                    val ivaValue = pizzaDao.getIva()
-
-                    if (ivaValue == null) {
-                        // Si no está configurado, mostramos un Snackbar
-                        withContext(Dispatchers.Main) {
-                            Snackbar.make(
-                                findViewById(R.id.main),
-                                "Debe configurar el IVA antes de agregar una pizza",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                        }
-                    } else {
-                        // Si el IVA está configurado, seguimos adelante y permitimos agregar pizza
-                        val intent = Intent(this@MainActivity, addPizza::class.java)
-                        startActivity(intent)
-                    }
-                }
+                // Agregar una nueva pizza
+                val intent = Intent(this, addPizza::class.java)
+                startActivity(intent)
                 true
             }
-
             R.id.mConfiguracio -> {
+                // Configuración del IVA
                 val intent = Intent(this, configuracion_IVA::class.java)
-                startActivity(intent)
+                configIvaLauncher.launch(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -112,11 +80,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        carregarPizzes() // Recargamos las pizzas cuando la actividad se reanuda
+        cargarPizzas() // Recargamos las pizzas cuando la actividad se reanuda
     }
 
     // Función para cargar las pizzas en el RecyclerView
-    private fun carregarPizzes() {
+    private fun cargarPizzas() {
         lifecycleScope.launch(Dispatchers.IO) {
             val pizzas = pizzaDao.getPizzes()
             withContext(Dispatchers.Main) {

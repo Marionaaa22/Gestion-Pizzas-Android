@@ -147,13 +147,16 @@ class addPizza : AppCompatActivity() {
         val descripcio = inputDescripcio.text.toString().trim()
         val tipus = spinner.selectedItem.toString().trim()
         val preuSenseIVA = inputPreu.text.toString().toFloat()
+        val preuIVA = preuSenseIVA * 1.21.toString().toFloat()
+        val iva = 0.21.toString().toFloat()
 
         val novaPizza = Pizzas(
             referencia = referencia,
             despcripcion = descripcio,
             tipos = tipus,
             preuSenseIVA = preuSenseIVA,
-            iva = 0.21f
+            preuAmbIVA = preuIVA,
+            iva = iva
         )
 
         lifecycleScope.launch {

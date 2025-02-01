@@ -10,5 +10,6 @@ data class Pizzas(
     val despcripcion: String,
     val tipos: String,
     val preuSenseIVA: Float,
+    val preuAmbIVA: Float,
     val iva: Float,
 )

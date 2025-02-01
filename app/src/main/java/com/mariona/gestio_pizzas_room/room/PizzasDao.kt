@@ -30,4 +30,9 @@ interface PizzasDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertPizza(pizzes: Pizzas): Long
 
+    // Función para obtener el IVA
+    @Query("SELECT iva FROM Pizzes WHERE referencia = 0 LIMIT 1")
+    fun getIva(): Float
+
+
 }

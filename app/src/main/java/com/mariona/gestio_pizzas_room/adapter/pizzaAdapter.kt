@@ -34,10 +34,10 @@ class pizzaAdapter(
         val pizza = pizzaList[position]
 
         holder.tvReferencia.text = pizza.referencia
-        holder.tvDescription.text = pizza.descripcio
+        holder.tvDescription.text = pizza.descripcion
         holder.tvType.text = pizza.tipo
-        holder.tvPriceWithoutTax.text = pizza.preu.toString()
-        holder.tvPriceWithTax.text = pizza.preuIVA.toString()
+        holder.tvPriceWithoutTax.text = pizza.precio.toString()
+        holder.tvPriceWithTax.text = pizza.precioIVA.toString()
         holder.tvReferencia.setOnClickListener {
             onEdit(pizza) // Llamar al callback para editar
         }

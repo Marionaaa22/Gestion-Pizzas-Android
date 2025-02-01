@@ -29,7 +29,7 @@ class editarPizzas : AppCompatActivity() {
         pizzaDao = database.pizzaDao()
         sharedPreferences = getSharedPreferences("PizzaPreferences", Context.MODE_PRIVATE)
 
-        val referencia = intent.getStringExtra("REFERENCIA")
+        val reference = intent.getStringExtra("REFERENCIA")
         val pizza = intent.getSerializableExtra("PIZZA") as? Pizzas
 
         val tvReferencia = findViewById<TextView>(R.id.tv_reference)
@@ -38,9 +38,9 @@ class editarPizzas : AppCompatActivity() {
         val btnGuardar = findViewById<Button>(R.id.btnGuardarEditar)
 
         pizza?.let {
-            tvReferencia.text = "Referencia: ${it.reference}"
-            etDescripcio.setText(it.description)
-            etPreu.setText(it.priceWithoutTax.toString())
+            tvReferencia.text = "Referencia: ${it.referencia}"
+            etDescripcio.setText(it.descripcion)
+            etPreu.setText(it.precio.toString())
 
             btnGuardar.setOnClickListener {
                 val novaDescripcio = etDescripcio.text.toString()
@@ -52,11 +52,11 @@ class editarPizzas : AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val pizzaActualitzada = Pizzas(
-                            reference = it.reference,
-                            description = novaDescripcio,
-                            type = it.type,
-                            priceWithoutTax = nouPreu,
-                            priceWithTax = nouPreuIVA
+                            referencia = it.reference,
+                            descripcion = novaDescripcio,
+                            tipo = it.tipo,
+                            precio = nouPreu,
+                            precioIVA = nouPreuIVA
                         )
                         pizzaDao.updatePizza(pizzaActualitzada)
 

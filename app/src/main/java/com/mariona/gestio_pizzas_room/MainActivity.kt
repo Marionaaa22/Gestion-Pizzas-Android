@@ -63,11 +63,9 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.mFiltrar -> return true
             R.id.mPizzes -> {
-                filterPizzas("PIZZA")
                 return true
             }
             R.id.mOrdenarAZ -> {
-                sortPizzas(true)
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -83,16 +81,6 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun filterPizzas(type: String) {
-        lifecycleScope.launch {
-            val filteredPizzas = withContext(Dispatchers.IO) {
-                database.pizzaDao().getLastReferenceByType(type)
-            }
-            pizzaList.clear()
-            pizzaList.addAll(filteredPizzas)
-            adapter.notifyDataSetChanged()
-        }
-    }
 
     private fun deletePizza(pizza: Pizzas) {
         lifecycleScope.launch {
@@ -109,11 +97,5 @@ class MainActivity : AppCompatActivity() {
             putExtra("PIZZA", pizza)
         }
         startActivity(intent)
-    }
-
-    private fun sortPizzas(ascending: Boolean) {
-        pizzaList.sortBy { it.descripcio }
-        if (!ascending) pizzaList.reverse()
-        adapter.notifyDataSetChanged()
     }
 }

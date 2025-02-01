@@ -1,69 +1,73 @@
 package com.mariona.gestio_pizzas_room
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.google.android.material.snackbar.Snackbar
 import com.mariona.gestio_pizzas_room.room.PizzasDao
-import com.mariona.gestio_pizzas_room.room.PizzasDataBase
+import com.mariona.gestio_pizzas_room.room.AppDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class configuracion_IVA : AppCompatActivity() {
 
-    private lateinit var ivaEditText: EditText
-    private lateinit var saveButton: Button
-    private lateinit var pizzaDao: PizzasDao
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var pizzaDao: PizzasDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuracion_iva)
 
-        ivaEditText = findViewById(R.id.inputIVA)
-        saveButton = findViewById(R.id.btnGuardarIVA)
+        // Configurar Room y SharedPreferences
+        val database = Room.databaseBuilder(applicationContext, AppDB::class.java, "pizza-database").build()
+        pizzaDao = database.pizzaDao()
+        sharedPreferences = getSharedPreferences("PizzaPreferences", Context.MODE_PRIVATE)
 
-        // Inicializamos la base de datos y SharedPreferences
-        val db = PizzasDataBase.getDatabase(this, lifecycleScope)
-        pizzaDao = db.pizzasDao()
-        sharedPreferences = getSharedPreferences("PizzaPreferences", MODE_PRIVATE)
+        val currentTax = sharedPreferences.getFloat("taxRate", 21f) // IVA predeterminado al 21%
+        findViewById<TextView>(R.id.tv_current_tax).text = "IVA actual: $currentTax%"
 
-        // Cargar el IVA almacenado en SharedPreferences (valor predeterminado: 21%)
-        val currentTax = sharedPreferences.getFloat("taxRate", 21f)
-        ivaEditText.setText(currentTax.toString())  // Establecemos el IVA actual en el EditText
+        val etNewTax = findViewById<EditText>(R.id.et_new_tax)
+        val btnSave = findViewById<Button>(R.id.btn_save_tax)
 
-        saveButton.setOnClickListener {
-            val ivaValue = ivaEditText.text.toString().toFloatOrNull()
+        btnSave.setOnClickListener {
+            val newTax = etNewTax.text.toString().toFloatOrNull()
 
-            if (ivaValue != null && ivaValue > 0) {
-                // Guardamos el nuevo valor de IVA en SharedPreferences
-                sharedPreferences.edit().putFloat("taxRate", ivaValue).apply()
+            // Validación del IVA
+            if (newTax != null && newTax > 0) {
+                sharedPreferences.edit().putFloat("taxRate", newTax).apply()
 
-                // Actualizamos el IVA en la base de datos para todas las pizzas
-                lifecycleScope.launch {
-                    val pizzas = pizzaDao.getPizzes()  // Obtener todas las pizzas
+                // Actualizar los precios con el nuevo IVA
+                CoroutineScope(Dispatchers.IO).launch {
+                    val pizzas = pizzaDao.getAllPizzas()
                     pizzas.forEach { pizza ->
-                        // Calculamos el precio con el nuevo IVA
-                        val priceWithTax = pizza.preuSenseIVA * (1 + ivaValue / 100)
-                        pizzaDao.updatePizza(pizza.copy(preuAmbIVA = priceWithTax))  // Actualizar pizza
+                        val priceWithTax = pizza.priceWithoutTax * (1 + newTax / 100)
+                        pizzaDao.updatePizza(pizza.copy(priceWithTax = priceWithTax))
                     }
 
-                    // Confirmar que el IVA se guardó correctamente
-                    Snackbar.make(it, "IVA guardado correctamente", Snackbar.LENGTH_SHORT).show()
-
-                    // Notificamos a la actividad principal que el IVA ha sido actualizado
-                    setResult(Activity.RESULT_OK)
-                    finish()  // Finalizar la actividad
+                    // Notificar a la actividad principal de la actualización
+                    val resultIntent = Intent().apply {
+                        putExtra("NEW_TAX", newTax)
+                    }
+                    setResult(Activity.RESULT_OK, resultIntent)
+                    finish()
                 }
             } else {
                 // Mostrar un mensaje de error si el IVA no es válido
-                Toast.makeText(this, "Por favor ingrese un valor válido para el IVA", Toast.LENGTH_SHORT).show()
+                runOnUiThread {
+                    Toast.makeText(this, "Por favor, ingrese un valor válido para el IVA", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+
     }
 }

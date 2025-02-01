@@ -9,7 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 
 class infoPizzas : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info_pizzas)
 
@@ -22,5 +22,5 @@ class infoPizzas : AppCompatActivity() {
         findViewById<TextView>(R.id.tvTipusPizza).text = "Tipo: $tipos"
         findViewById<TextView>(R.id.tvDescripcioPizza).text = "Descripción: $despcripcion"
         findViewById<TextView>(R.id.tvPreuSense).text = "Precio sin IVA: $preuSenseIVA"
-    }
+    }*/
 }

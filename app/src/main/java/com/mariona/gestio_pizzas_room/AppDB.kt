@@ -1,18 +1,14 @@
 package com.mariona.gestio_pizzas_room
 
 import android.app.Application
+import androidx.room.Database
 import androidx.room.Room
-import com.mariona.gestio_pizzas_room.room.PizzasDataBase
+import androidx.room.RoomDatabase
+import com.mariona.gestio_pizzas_room.room.Pizzas
+import com.mariona.gestio_pizzas_room.room.PizzasDao
+import com.mariona.gestio_pizzas_room.room.AppDatabase
 
-class AppDB : Application() {
-    lateinit var db: PizzasDataBase
-
-    override fun onCreate() {
-        super.onCreate()
-        db = Room.databaseBuilder(
-            applicationContext,
-            PizzasDataBase::class.java,
-            "pizzas-db"
-        ).build()
-    }
+@Database(entities = [Pizzas::class], version = 1, exportSchema = false)
+abstract class AppDB : RoomDatabase() {
+    abstract fun pizzaDao(): PizzasDao
 }

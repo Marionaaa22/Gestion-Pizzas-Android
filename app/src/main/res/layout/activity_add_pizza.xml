@@ -3,125 +3,80 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+    <Spinner
+        android:id="@+id/spinner_type"
+        android:layout_width="411dp"
+        android:layout_height="62dp"
+        android:entries="@array/pizza_types"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Guía para el layout -->
+    <EditText
+        android:id="@+id/et_description"
+        android:layout_width="406dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="2dp"
+        android:hint="Descripción"
+        app:layout_constraintBottom_toTopOf="@+id/et_price"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_type" />
+
+    <EditText
+        android:id="@+id/et_price"
+        android:layout_width="403dp"
+        android:layout_height="78dp"
+        android:hint="Precio"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/et_referencia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline8" />
+
+    <EditText
+        android:id="@+id/et_referencia"
+        android:layout_width="403dp"
+        android:layout_height="78dp"
+        android:hint="Referencia"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="167dp"
+        android:layout_height="71dp"
+        android:layout_marginTop="56dp"
+        android:text="Guardar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_referencia" />
+
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="81dp" />
+        app:layout_constraintGuide_begin="224dp" />
 
-    <!-- Texto de Referencia -->
-    <TextView
-        android:id="@+id/textViewReferencia"
-        android:layout_width="168dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="4dp"
-        android:autoSizeTextType="uniform"
-        android:text="Referencia:"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline2" />
-
-    <!-- Campo de Entrada de Referencia -->
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/inputReferencia"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewReferencia" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="62dp" />
 
-    <!-- Texto de Descripción -->
-    <TextView
-        android:id="@+id/textViewDescripcion"
-        android:layout_width="175dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="4dp"
-        android:autoSizeTextType="uniform"
-        android:text="Descripción:"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputReferencia" />
-
-    <!-- Campo de Entrada de Descripción -->
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/inputDescripcion"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewDescripcion" />
-
-    <!-- Spinner Tipo -->
-    <Spinner
-        android:id="@+id/inputTipo"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputDescripcion" />
-
-    <!-- Texto Preu -->
-    <TextView
-        android:id="@+id/textViewPreu"
-        android:layout_width="132dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="4dp"
-        android:autoSizeTextType="uniform"
-        android:text="Preu:"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputTipo" />
-
-    <!-- Campo de Entrada Preu -->
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/inputPreu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewPreu" />
-
-    <!-- Botón Guardar -->
-
-    <Button
-        android:id="@+id/btnGuardar"
-        android:layout_width="138dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="28dp"
-        android:text="Guardar"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.124"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputPreu" />
-
-    <Button
-        android:id="@+id/btnCancelar"
-        android:layout_width="157dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="28dp"
-        android:text="Cancelar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.854"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputPreu" />
-
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="141dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

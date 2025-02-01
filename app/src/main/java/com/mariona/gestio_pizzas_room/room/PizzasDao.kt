@@ -10,27 +10,20 @@ import androidx.room.Update
 @Dao
 interface PizzasDao {
 
-    // Función para obtener todas las pizzas
-    @Query("SELECT * FROM Pizzes ORDER BY referencia ASC")
-    fun getPizzes(): MutableList<Pizzas>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPizza(pizza: Pizzas)
 
-    // Función para obtener la última referencia
-    @Query("SELECT COALESCE(MAX(referencia), 0) FROM Pizzes")
-    fun getLastReferenciaByType(): Long
+    @Query("SELECT * FROM Pizza ORDER BY reference ASC")
+    fun getAllPizzas(): MutableList<Pizzas>
 
-    // Función para eliminar una pizza
+    @Query("SELECT reference FROM Pizza WHERE type = :type ORDER BY reference DESC LIMIT 1")
+    fun getLastReferenceByType(type: String): String?
+
+    @Query("SELECT * FROM Pizza WHERE reference = :reference LIMIT 1")
+    fun getPizzaByReference(reference: String): Pizzas?
     @Delete
-    fun deletePizza(pizzes: Pizzas)
+    fun deletePizza(pizza: Pizzas)
 
-    // Función para actualizar una pizza
     @Update
-    fun updatePizza(pizzes: Pizzas)
-
-    // Función para insertar una pizza
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertPizza(pizzes: Pizzas): Long
-
-    // Función para obtener el IVA
-    @Query("SELECT iva FROM Pizzes WHERE referencia = 0 LIMIT 1")
-    fun getIva(): Float
+    fun updatePizza(pizza: Pizzas)
 }

@@ -1,9 +1,22 @@
 <resources>
-    <string name="app_name">Gestio_pizzas_room</string>
+    <string name="app_name">Pizzas</string>
+
+    <string name="Pi">Pizza</string>
+    <string name="Pc">PizzaCeli</string>
+    <string name="Pv">PizzaVeg</string>
+    <string name="To">Toppics</string>
+    <string name="Ordenar">Ordenar a-z</string>
+    <string name="addpizza">AddPizza</string>
+    <string name="Nom">Referencia:</string>
+    <string name="Tipus">Tipus:</string>
+    <string name="Descripcio">Descripcio:</string>
+    <string name="senseiva">SenseIva:</string>
+    <string name="iva">Iva:</string>
     <string-array name="pizza_types">
         <item>PIZZA</item>
         <item>PIZZA VEGANA</item>
         <item>PIZZA CELIACA</item>
         <item>TOPPING</item>
     </string-array>
+
 </resources>

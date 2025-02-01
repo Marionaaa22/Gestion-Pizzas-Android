@@ -1,190 +1,119 @@
 package com.mariona.gestio_pizzas_room
 
+import android.app.Activity
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.google.android.material.snackbar.Snackbar
 import com.mariona.gestio_pizzas_room.adapter.pizzaAdapter
 import com.mariona.gestio_pizzas_room.room.Pizzas
 import com.mariona.gestio_pizzas_room.room.PizzasDataBase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class addPizza : AppCompatActivity() {
 
-    private lateinit var inputReferencia: EditText
-    private lateinit var inputDescripcio: EditText
-    private lateinit var inputPreu: EditText
-    private lateinit var spinner: Spinner
-    private lateinit var mainView: View
-    private lateinit var database: PizzasDataBase
-    private lateinit var pizzaAdapter: pizzaAdapter  // Adaptador
+    private lateinit var sharedPreferences: SharedPreferences
+    private val PREF_NAME = "PizzaPreferences"
+    private val REFERENCE_KEY = "lastReferenceNumber"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_add_pizza)
 
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        val spinner = findViewById<Spinner>(R.id.spinner_type)
+        val etDescription = findViewById<EditText>(R.id.et_description)
+        val etPrice = findViewById<EditText>(R.id.et_price)
+        val etReference = findViewById<EditText>(R.id.et_referencia)
+        val btnSave = findViewById<Button>(R.id.btn_save)
 
-        inputReferencia = findViewById(R.id.inputReferencia)
-        inputDescripcio = findViewById(R.id.inputDescripcion)
-        inputPreu = findViewById(R.id.inputPreu)
-        mainView = findViewById(R.id.main)
+        btnSave.setOnClickListener {
+            // Obtener los datos del usuario
+            val type = spinner.selectedItem.toString()
+            val description = etDescription.text.toString()
+            val priceWithoutTax = etPrice.text.toString().toDoubleOrNull()
+            val reference = etReference.text.toString()
 
-        database = PizzasDataBase.getDatabase(this, lifecycleScope)
-
-        spinner = findViewById(R.id.inputTipo)
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.pizza_types,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = adapter
-        }
-
-        // Pasar el adaptador al RecyclerView
-        pizzaAdapter = pizzaAdapter(this, mutableListOf(), onDelete = {}, onEdit = {})
-
-        findViewById<Button>(R.id.btnGuardar).setOnClickListener {
-            if (validarInputs()) {
-                guardarPizza()
+            // Validaciones básicas
+            if (type.isBlank() || description.isBlank() || priceWithoutTax == null || reference.isBlank()) {
+                // Muestra un mensaje de error si falta algún campo
+                Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
             }
-        }
 
-        findViewById<Button>(R.id.btnCancelar).setOnClickListener {
-            clearInputs()
-            finish()
-        }
-
-        mainView?.let {
-            ViewCompat.setOnApplyWindowInsetsListener(it) { view, insets ->
-                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                view.updatePadding(
-                    left = systemBars.left,
-                    top = systemBars.top,
-                    right = systemBars.right,
-                    bottom = systemBars.bottom
-                )
-                insets
+            // Validar que la referencia sea coherente con el tipo
+            val prefix = when (type) {
+                "PIZZA" -> "PI"
+                "PIZZA VEGANA" -> "PV"
+                "PIZZA CELIACA" -> "PC"
+                "TOPPING" -> "TO"
+                else -> null
             }
-        } ?: run {
-            android.util.Log.e("AddPizza", "El View con ID 'main' no se encontró en la vista.")
-        }
-    }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
-    }
+            if (!reference.startsWith(prefix ?: "")) {
+                Toast.makeText(this, "La referencia debe comenzar con $prefix", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
 
-    private fun validarInputs(): Boolean {
-        val referencia = inputReferencia.text.toString().trim()
-        val descripcio = inputDescripcio.text.toString().trim()
-        val preuText = inputPreu.text.toString().trim()
-        val tipus = spinner.selectedItem.toString().trim()
+            // Calcular el precio con IVA
+            val priceWithTax = calculatePriceWithTax(priceWithoutTax)
 
-        if (referencia.isEmpty() || referencia.length < 6) {
-            Snackbar.make(mainView, "La referència ha de tenir com a mínim 6 caràcters",
-                Snackbar.LENGTH_SHORT)
-                .show()
-            return false
-        }
+            // Crear el objeto Pizza
+            val pizza = Pizzas(reference, type, description, priceWithoutTax, priceWithTax)
 
-        val prefix = referencia.substring(0, 2)
-        val validPrefix = when (tipus) {
-            "PIZZA" -> "PI"
-            "PIZZA VEGANA" -> "PV"
-            "PIZZA CELIACA" -> "PC"
-            "TOPPING" -> "TO"
-            else -> ""
-        }
+            // Guardar la pizza en la base de datos
+            // Verificar si la referencia ya existe en la base de datos
+            CoroutineScope(Dispatchers.IO).launch {
+                val database = Room.databaseBuilder(
+                    applicationContext,
+                    AppDB::class.java, "pizza-database"
+                ).build()
 
-        if (prefix != validPrefix) {
-            Snackbar.make(mainView, "La referència ha de començar per" +
-                    " $validPrefix per al tipus seleccionat.", Snackbar.LENGTH_SHORT)
-                .show()
-            return false
-        }
+                val existingPizza = database.pizzaDao().getPizzaByReference(reference)
+                if (existingPizza != null) {
+                    runOnUiThread {
+                        Toast.makeText(
+                            this@addPizza,
+                            "La referencia ya existe",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    return@launch
+                }
 
-        if (descripcio.isEmpty()) {
-            Snackbar.make(mainView, "La descripció és obligatòria",
-                Snackbar.LENGTH_SHORT)
-                .show()
-            return false
-        }
-
-        if (preuText.isEmpty()) {
-            Snackbar.make(mainView, "El preu és obligatori",
-                Snackbar.LENGTH_SHORT)
-                .show()
-            return false
-        }
-
-        val preu = preuText.toFloatOrNull()
-        if (preu == null || preu <= 0) {
-            Snackbar.make(mainView, "El preu ha de ser un valor positiu",
-                Snackbar.LENGTH_SHORT)
-                .show()
-            return false
-        }
-
-        return true
-    }
-
-    private fun guardarPizza() {
-        val referencia = inputReferencia.text.toString().trim()
-        val descripcio = inputDescripcio.text.toString().trim()
-        val tipus = spinner.selectedItem.toString().trim()
-        val preuSenseIVA = inputPreu.text.toString().toFloat()
-        val preuIVA = preuSenseIVA * 1.21f // Calcula el precio con IVA
-        val iva = 0.21f // El IVA es 21%
-
-        val novaPizza = Pizzas(
-            referencia = referencia,
-            despcripcion = descripcio,
-            tipos = tipus,
-            preuSenseIVA = preuSenseIVA,
-            preuAmbIVA = preuIVA,
-            iva = iva
-        )
-
-        // Guardar pizza en la base de datos
-        lifecycleScope.launch(Dispatchers.IO) {
-            // Insertamos la nueva pizza en la base de datos
-            database.pizzasDao().insertPizza(novaPizza)
-
-            // Después de insertar la pizza, actualizamos el RecyclerView
-            withContext(Dispatchers.Main) {
-                // Agregar la pizza al adaptador
-                pizzaAdapter.pizzaList.add(novaPizza)  // Añadir al modelo de datos
-                pizzaAdapter.notifyItemInserted(pizzaAdapter.pizzaList.size - 1) // Notificar que el ítem ha sido agregado
-                Snackbar.make(mainView, "Pizza afegida correctament!", Snackbar.LENGTH_SHORT).show()
-                clearInputs()
-                finish()
+                // Si la referencia no existe, continúa guardando la pizza
+                database.pizzaDao().insertPizza(pizza)
+                runOnUiThread {
+                    // Pasar el resultado de vuelta a la actividad principal
+                    val resultIntent = Intent()
+                    resultIntent.putExtra("NEW_PIZZA", pizza)
+                    setResult(Activity.RESULT_OK, resultIntent)
+                    finish()
+                }
             }
         }
     }
 
-    private fun clearInputs() {
-        inputReferencia.text.clear()
-        inputDescripcio.text.clear()
-        inputPreu.text.clear()
-        spinner.setSelection(0)
+    private fun calculatePriceWithTax(priceWithoutTax: Double): Double {
+        val taxRate = 0.21 // Ejemplo: 21% de IVA
+        return priceWithoutTax * (1 + taxRate)
     }
 }
 

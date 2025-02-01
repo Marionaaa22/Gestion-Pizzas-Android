@@ -9,28 +9,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Pizzas::class], version = 3)
-abstract class PizzasDataBase : RoomDatabase() {
-    abstract fun pizzasDao(): PizzasDao
+@Database(entities = [Pizzas::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun pizzaDao(): PizzasDao
 
     companion object {
-        @Volatile
-        private var INSTANCE: PizzasDataBase? = null
+        @Volatile private var INSTANCE: AppDatabase? = null
 
-        fun getDatabase(
-            context: Context,
-            scope: CoroutineScope
-        ): PizzasDataBase {
+        fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+                Room.databaseBuilder(
                     context.applicationContext,
-                    PizzasDataBase::class.java,
-                    "pizzas-db"
-                )
-                    .fallbackToDestructiveMigration()
-                    .build()
-                INSTANCE = instance
-                instance
+                    AppDatabase::class.java,
+                    "pizza_database"
+                ).build().also { INSTANCE = it }
             }
         }
     }

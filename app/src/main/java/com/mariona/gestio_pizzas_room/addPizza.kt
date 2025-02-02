@@ -65,7 +65,7 @@ class addPizza : AppCompatActivity() {
             val priceWithTax = calculatePriceWithTax(priceWithoutTax)
 
             // Crear el objeto Pizza
-            val pizza = Pizzas(reference, type, description, priceWithoutTax, priceWithTax)
+            val pizza = Pizzas(reference, description, type, priceWithoutTax, priceWithTax)
 
             // Guardar la pizza en la base de datos
             // Verificar si la referencia ya existe en la base de datos
@@ -103,4 +103,3 @@ class addPizza : AppCompatActivity() {
         return priceWithoutTax * (1 + taxRate)
     }
 }
-

@@ -1,5 +1,6 @@
 package com.mariona.gestio_pizzas_room
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -21,6 +22,10 @@ class MainActivity : AppCompatActivity() {
     private val pizzaList = mutableListOf<Pizzas>()
     private lateinit var database: AppDB
 
+    companion object {
+        const val ADD_PIZZA_REQUEST_CODE = 1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,7 +39,6 @@ class MainActivity : AppCompatActivity() {
         // Set up the toolbar
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.menu)
         setSupportActionBar(toolbar)
-
 
         // Initialize the adapter
         adapter = pizzaAdapter(pizzaList, onDelete = { pizza ->
@@ -63,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.mAfegirPizza -> {
                 val intent = Intent(this, addPizza::class.java)
-                startActivity(intent)
+                startActivityForResult(intent, ADD_PIZZA_REQUEST_CODE)
                 return true
             }
             R.id.mFiltrar -> return true
@@ -77,6 +81,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ADD_PIZZA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            lifecycleScope.launch {
+                loadPizzasFromDatabase()
+            }
+        }
+    }
+
     private suspend fun loadPizzasFromDatabase() {
         val pizzasFromDb = withContext(Dispatchers.IO) {
             database.pizzaDao().getAllPizzas()
@@ -85,7 +98,6 @@ class MainActivity : AppCompatActivity() {
         pizzaList.addAll(pizzasFromDb)
         adapter.notifyDataSetChanged()
     }
-
 
     private fun deletePizza(pizza: Pizzas) {
         lifecycleScope.launch {

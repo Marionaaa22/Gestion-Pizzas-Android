@@ -86,6 +86,13 @@ class MainActivity : AppCompatActivity() {
                 filterPizzasByType("PIZZA VEGANA")
                 return true
             }
+
+            R.id.mTodasPizzas -> {
+                lifecycleScope.launch {
+                    loadPizzasFromDatabase()
+                }
+                return true
+            }
             R.id.mOrdenarAZ -> {
                 pizzaList.sortBy { it.referencia }
                 adapter.notifyDataSetChanged()

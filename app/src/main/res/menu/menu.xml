@@ -13,6 +13,9 @@
         app:showAsAction="always" >
         <menu >
             <item
+                android:id="@+id/mTodasPizzas"
+                android:title="Todas" />
+            <item
                 android:id="@+id/mPizzes"
                 android:title="Pizzes" />
             <item

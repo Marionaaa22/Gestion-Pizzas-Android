@@ -38,6 +38,19 @@ class pizzaAdapter(
         holder.tvType.text = pizza.tipo
         holder.tvPriceWithoutTax.text = pizza.precio.toString()
         holder.tvPriceWithTax.text = pizza.precioIVA.toString()
+
+        // Cambiar el fondo de la CardView según el tipo de pizza
+        val cardView = holder.itemView.findViewById<CardView>(R.id.card)
+        val context = holder.itemView.context
+        val color = when (pizza.tipo) {
+            "PIZZA" -> R.color.pizza_color
+            "PIZZA VEGANA" -> R.color.vegan_pizza_color
+            "PIZZA CELIACA" -> R.color.celiac_pizza_color
+            "TOPPING" -> R.color.topping_color
+            else -> android.R.color.white
+        }
+        cardView.setCardBackgroundColor(ContextCompat.getColor(context, color))
+
         holder.tvReferencia.setOnClickListener {
             onEdit(pizza) // Llamar al callback para editar
         }
@@ -47,6 +60,8 @@ class pizzaAdapter(
             notifyItemRemoved(position)
             onDelete(removedPizza) // Llama al callback para eliminarla de Room
         }
+
+
     }
 
     override fun getItemCount(): Int = pizzaList.size

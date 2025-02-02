@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="pizza_color">#ED6A5A</color>
-    <color name="vegan_pizza_color">#F4F1BB</color>
+    <color name="vegan_pizza_color">#9DDF9B</color>
     <color name="celiac_pizza_color">#9BC1BC</color>
-    <color name="topping_color">#E46589</color>
+    <color name="topping_color">#F1BCBB</color>
 </resources>

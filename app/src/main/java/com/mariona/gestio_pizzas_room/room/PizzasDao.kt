@@ -25,6 +25,9 @@ interface PizzasDao {
     @Query("SELECT * FROM Pizza WHERE tipo = :type")
     fun getPizzasByType(type: String): List<Pizzas>
 
+    @Query("SELECT * FROM Pizza WHERE descripcion IS NULL OR descripcion = :descripcion")
+    fun getPizzasByDescripcion(descripcion: String): List<Pizzas>
+
     @Delete
     fun deletePizza(pizza: Pizzas)
 

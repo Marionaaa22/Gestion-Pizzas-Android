@@ -93,6 +93,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 return true
             }
+
+            R.id.mDescripcio -> {
+                val descripcion = "some description"
+                filterPizzasByDescripcion(descripcion)
+                return true
+            }
             R.id.mOrdenarAZ -> {
                 pizzaList.sortBy { it.referencia }
                 adapter.notifyDataSetChanged()
@@ -136,6 +142,17 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val filteredPizzas = withContext(Dispatchers.IO) {
                 database.pizzaDao().getPizzasByType(type)
+            }
+            pizzaList.clear()
+            pizzaList.addAll(filteredPizzas)
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun filterPizzasByDescripcion(descripcion: String) {
+        lifecycleScope.launch {
+            val filteredPizzas = withContext(Dispatchers.IO) {
+                database.pizzaDao().getPizzasByDescripcion("%$descripcion%")
             }
             pizzaList.clear()
             pizzaList.addAll(filteredPizzas)

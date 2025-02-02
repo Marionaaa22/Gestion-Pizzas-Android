@@ -10,7 +10,7 @@
     <string name="Nom">Referencia:</string>
     <string name="Tipus">Tipus:</string>
     <string name="Descripcio">Descripcio:</string>
-    <string name="senseiva">SenseIva:</string>
+    <string name="senseiva">Sense Iva:</string>
     <string name="iva">Iva:</string>
     <string-array name="pizza_types">
         <item>PIZZA</item>

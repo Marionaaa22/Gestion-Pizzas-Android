@@ -74,6 +74,10 @@ class MainActivity : AppCompatActivity() {
             R.id.mPizzes -> {
                 return true
             }
+            R.id.mToppings -> {
+                return true
+            }
+
             R.id.mOrdenarAZ -> {
                 return true
             }

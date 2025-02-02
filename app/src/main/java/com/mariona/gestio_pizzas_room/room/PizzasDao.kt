@@ -21,6 +21,10 @@ interface PizzasDao {
 
     @Query("SELECT * FROM Pizza WHERE referencia = :reference LIMIT 1")
     fun getPizzaByReference(reference: String): Pizzas?
+
+    @Query("SELECT * FROM Pizza WHERE tipo = :type")
+    fun getPizzasByType(type: String): List<Pizzas>
+
     @Delete
     fun deletePizza(pizza: Pizzas)
 

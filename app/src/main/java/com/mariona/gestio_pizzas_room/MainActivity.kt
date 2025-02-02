@@ -70,15 +70,25 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(intent, ADD_PIZZA_REQUEST_CODE)
                 return true
             }
-            R.id.mFiltrar -> return true
             R.id.mPizzes -> {
+                filterPizzasByType("PIZZA")
                 return true
             }
             R.id.mToppings -> {
+                filterPizzasByType("TOPPING")
                 return true
             }
-
+            R.id.mPizzesCeliacas -> {
+                filterPizzasByType("PIZZA CELIACA")
+                return true
+            }
+            R.id.mPizzesVeganes -> {
+                filterPizzasByType("PIZZA VEGANA")
+                return true
+            }
             R.id.mOrdenarAZ -> {
+                pizzaList.sortBy { it.referencia }
+                adapter.notifyDataSetChanged()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -101,6 +111,17 @@ class MainActivity : AppCompatActivity() {
         pizzaList.clear()
         pizzaList.addAll(pizzasFromDb)
         adapter.notifyDataSetChanged()
+    }
+
+    private fun filterPizzasByType(type: String) {
+        lifecycleScope.launch {
+            val filteredPizzas = withContext(Dispatchers.IO) {
+                database.pizzaDao().getPizzasByType(type)
+            }
+            pizzaList.clear()
+            pizzaList.addAll(filteredPizzas)
+            adapter.notifyDataSetChanged()
+        }
     }
 
     private fun deletePizza(pizza: Pizzas) {

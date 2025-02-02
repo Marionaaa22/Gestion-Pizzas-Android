@@ -18,9 +18,11 @@ import kotlinx.coroutines.launch
 import java.io.Serializable
 
 class editarPizzas : AppCompatActivity() {
-    /*private lateinit var pizzaDao: PizzasDao
+    private lateinit var pizzaDao: PizzasDao
     private lateinit var sharedPreferences: SharedPreferences
-    val database = Room.databaseBuilder(applicationContext, AppDB::class.java, "pizza-database").build()
+    private val database by lazy {
+        Room.databaseBuilder(applicationContext, AppDB::class.java, "pizza-database").build()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +40,7 @@ class editarPizzas : AppCompatActivity() {
         val btnGuardar = findViewById<Button>(R.id.btnGuardarEditar)
 
         pizza?.let {
-            tvReferencia.text = "Referencia: ${it.referencia}"
+            tvReferencia.text = it.referencia
             etDescripcio.setText(it.descripcion)
             etPreu.setText(it.precio.toString())
 
@@ -52,7 +54,7 @@ class editarPizzas : AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val pizzaActualitzada = Pizzas(
-                            referencia = it.reference,
+                            referencia = tvReferencia.toString(),
                             descripcion = novaDescripcio,
                             tipo = pizza.tipo,
                             precio = nouPreu,
@@ -71,5 +73,5 @@ class editarPizzas : AppCompatActivity() {
                 }
             }
         }
-    }*/
+    }
 }

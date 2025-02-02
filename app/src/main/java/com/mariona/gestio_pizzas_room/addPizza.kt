@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
+import com.google.android.material.snackbar.Snackbar
 import com.mariona.gestio_pizzas_room.room.Pizzas
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,8 +41,7 @@ class addPizza : AppCompatActivity() {
             // Validaciones básicas
             if (type.isBlank() || description.isBlank() || priceWithoutTax == null || reference.isBlank()) {
                 // Muestra un mensaje de error si falta algún campo
-                Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT)
-                    .show()
+                Snackbar.make(it, "Por favor, completa todos los campos", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -56,8 +55,7 @@ class addPizza : AppCompatActivity() {
             }
 
             if (!reference.startsWith(prefix ?: "")) {
-                Toast.makeText(this, "La referencia debe comenzar con $prefix", Toast.LENGTH_SHORT)
-                    .show()
+                Snackbar.make(it, "La referencia debe comenzar con $prefix", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -78,11 +76,7 @@ class addPizza : AppCompatActivity() {
                 val existingPizza = database.pizzaDao().getPizzaByReference(reference)
                 if (existingPizza != null) {
                     runOnUiThread {
-                        Toast.makeText(
-                            this@addPizza,
-                            "La referencia ya existe",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Snackbar.make(btnSave, "La referencia ya existe", Snackbar.LENGTH_SHORT).show()
                     }
                     return@launch
                 }

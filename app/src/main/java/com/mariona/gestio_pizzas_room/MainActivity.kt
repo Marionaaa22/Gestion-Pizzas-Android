@@ -91,6 +91,18 @@ class MainActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
                 return true
             }
+
+            R.id.mOrdenarZA -> {
+                pizzaList.sortBy { it.precio }
+                adapter.notifyDataSetChanged()
+                return true
+            }
+
+            R.id.mConfiguracio -> {
+                val intent = Intent(this, configuracion_IVA::class.java)
+                startActivity(intent)
+                return true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }

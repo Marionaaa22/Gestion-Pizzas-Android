@@ -1,10 +1,12 @@
 package com.mariona.gestio_pizzas_room
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +17,6 @@ import com.mariona.gestio_pizzas_room.room.Pizzas
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: pizzaAdapter
@@ -95,8 +96,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.mDescripcio -> {
-                val descripcion = "some description"
-                filterPizzasByDescripcion(descripcion)
+                showSearchByDescriptionDialog()
                 return true
             }
             R.id.mOrdenarAZ -> {
@@ -147,6 +147,25 @@ class MainActivity : AppCompatActivity() {
             pizzaList.addAll(filteredPizzas)
             adapter.notifyDataSetChanged()
         }
+    }
+
+    private fun showSearchByDescriptionDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Buscar por Descripción")
+
+        val input = EditText(this)
+        builder.setView(input)
+
+        builder.setPositiveButton("Buscar") { dialog, _ ->
+            val descripcion = input.text.toString()
+            filterPizzasByDescripcion(descripcion)
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
     }
 
     private fun filterPizzasByDescripcion(descripcion: String) {

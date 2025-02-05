@@ -68,9 +68,9 @@ class pizzaAdapter(
 
     override fun getItemCount(): Int = pizzaList.size
 
-    fun updateData(newList: List<Pizzas>) {
+    fun updatePizzas(newPizzasList: List<Pizzas>) {
         pizzaList.clear()
-        pizzaList.addAll(newList)
+        pizzaList.addAll(newPizzasList)
         notifyDataSetChanged()
     }
 }

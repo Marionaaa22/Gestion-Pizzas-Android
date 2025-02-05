@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
+import com.mariona.gestio_pizzas_room.MainActivity.Companion.EDIT_PIZZA_REQUEST_CODE
 import com.mariona.gestio_pizzas_room.room.Pizzas
 import com.mariona.gestio_pizzas_room.room.PizzasDao
 import kotlinx.coroutines.CoroutineScope
@@ -73,5 +75,13 @@ class editarPizzas : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun editPizza(pizza: Pizzas) {
+        Log.d("MainActivity", "Editando pizza: ${pizza.referencia}")
+        val intent = Intent(this, editarPizzas::class.java).apply {
+            putExtra("PIZZA", pizza)
+        }
+        startActivityForResult(intent, EDIT_PIZZA_REQUEST_CODE)
     }
 }

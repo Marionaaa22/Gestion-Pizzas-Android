@@ -25,7 +25,6 @@ class configuracion_IVA : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuracion_iva)
 
-        // Configurar Room y SharedPreferences
         val database = Room.databaseBuilder(applicationContext, AppDB::class.java, "pizza-database").build()
         pizzaDao = database.pizzaDao()
         sharedPreferences = getSharedPreferences("PizzaPreferences", Context.MODE_PRIVATE)
@@ -39,11 +38,9 @@ class configuracion_IVA : AppCompatActivity() {
         btnSave.setOnClickListener {
             val newTax = etNewTax.text.toString().toFloatOrNull()
 
-            // Validación del IVA
             if (newTax != null && newTax > 0) {
                 sharedPreferences.edit().putFloat("taxRate", newTax).apply()
 
-                // Actualizar los precios con el nuevo IVA
                 CoroutineScope(Dispatchers.IO).launch {
                     val pizzas = pizzaDao.getAllPizzas()
                     pizzas.forEach { pizza ->
@@ -51,7 +48,6 @@ class configuracion_IVA : AppCompatActivity() {
                         pizzaDao.updatePizza(pizza.copy(precioIVA = priceWithTax))
                     }
 
-                    // Notificar a la actividad principal de la actualización
                     val resultIntent = Intent().apply {
                         putExtra("NEW_TAX", newTax)
                     }
@@ -59,7 +55,7 @@ class configuracion_IVA : AppCompatActivity() {
                     finish()
                 }
             } else {
-                // Mostrar un mensaje de error si el IVA no es válido
+
                 runOnUiThread {
                     Toast.makeText(this, "Por favor, ingrese un valor válido para el IVA", Toast.LENGTH_SHORT)
                         .show()

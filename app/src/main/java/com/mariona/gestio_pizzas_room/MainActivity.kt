@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val ADD_PIZZA_REQUEST_CODE = 1
+        const val EDIT_PIZZA_REQUEST_CODE = 2
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,6 +126,16 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == ADD_PIZZA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             lifecycleScope.launch {
                 loadPizzasFromDatabase()
+            }
+        }
+        if (requestCode == EDIT_PIZZA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val updatedPizza = data?.getSerializableExtra("UPDATED_PIZZA") as? Pizzas
+            updatedPizza?.let {
+                val position = pizzaList.indexOfFirst { pizza -> pizza.referencia == it.referencia }
+                if (position != -1) {
+                    pizzaList[position] = it
+                    adapter.notifyItemChanged(position)
+                }
             }
         }
     }

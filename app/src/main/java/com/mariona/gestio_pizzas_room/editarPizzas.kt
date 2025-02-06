@@ -17,6 +17,7 @@ import com.mariona.gestio_pizzas_room.room.PizzasDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.Serializable
 
 class editarPizzas : AppCompatActivity() {
@@ -56,7 +57,7 @@ class editarPizzas : AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val pizzaActualitzada = Pizzas(
-                            referencia = tvReferencia.toString(),
+                            referencia = pizza.referencia,
                             descripcion = novaDescripcio,
                             tipo = pizza.tipo,
                             precio = nouPreu,
@@ -64,11 +65,13 @@ class editarPizzas : AppCompatActivity() {
                         )
                         pizzaDao.updatePizza(pizzaActualitzada)
 
-                        val resultIntent = Intent().apply {
-                            putExtra("UPDATED_PIZZA", pizzaActualitzada as Serializable)
+                        withContext(Dispatchers.Main) {
+                            val resultIntent = Intent().apply {
+                                putExtra("UPDATED_PIZZA", pizzaActualitzada as Serializable)
+                            }
+                            setResult(Activity.RESULT_OK, resultIntent)
+                            finish()
                         }
-                        setResult(Activity.RESULT_OK, resultIntent)
-                        finish()
                     }
                 } else {
                     etPreu.error = "Introduce un valor válido para el precio"

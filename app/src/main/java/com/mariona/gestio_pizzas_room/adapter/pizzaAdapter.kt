@@ -14,7 +14,7 @@ import com.mariona.gestio_pizzas_room.room.Pizzas
 class pizzaAdapter(
     private var pizzaList: MutableList<Pizzas>,
     private val onDelete: (Pizzas) -> Unit,
-    private val onEdit: (Pizzas) -> Unit // Nuevo callback
+    private val onEdit: (Pizzas) -> Unit
 ) : RecyclerView.Adapter<pizzaAdapter.PizzaViewHolder>() {
 
     class PizzaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -66,11 +66,12 @@ class pizzaAdapter(
 
     }
 
-    override fun getItemCount(): Int = pizzaList.size
-
     fun updatePizzas(newPizzasList: List<Pizzas>) {
         pizzaList.clear()
         pizzaList.addAll(newPizzasList)
         notifyDataSetChanged()
     }
+
+    override fun getItemCount(): Int = pizzaList.size
+
 }

@@ -123,23 +123,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ADD_PIZZA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            lifecycleScope.launch {
-                loadPizzasFromDatabase()
-            }
-        }
         if (requestCode == EDIT_PIZZA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val updatedPizza = data?.getSerializableExtra("UPDATED_PIZZA") as? Pizzas
-            updatedPizza?.let {
-                val position = pizzaList.indexOfFirst { pizza -> pizza.referencia == it.referencia }
-                if (position != -1) {
-                    pizzaList[position] = it
-                    adapter.notifyItemChanged(position)
-                }
+            updatedPizza?.let { updatedPizzaItem ->
+                pizzaList.indexOfFirst { it.referencia == updatedPizzaItem.referencia }
+                    .takeIf { it >= 0 }?.let { index ->
+                        pizzaList[index] = updatedPizzaItem
+                        adapter.updatePizzas(pizzaList)
+                    }
             }
         }
     }
-
     private suspend fun loadPizzasFromDatabase() {
         val pizzasFromDb = withContext(Dispatchers.IO) {
             database.pizzaDao().getAllPizzas()

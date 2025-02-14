@@ -15,13 +15,14 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/nouIva"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.691" />
 
     <EditText
         android:id="@+id/nouIva"
         android:layout_width="381dp"
         android:layout_height="69dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="140dp"
         android:hint="Introduce el nuevo IVA (%)"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,8 +34,11 @@
         android:id="@+id/btnGuardarIva"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
         android:text="Guardar IVA"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="200dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nouIva" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,6 @@ package com.mariona.gestio_pizzas_room
 
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -54,7 +53,7 @@ class addPizza : AppCompatActivity() {
 
             val priceWithTax = calculatePriceWithTax(priceWithoutTax)
 
-            // Crear  Pizza
+            // Crear Pizza
             val pizza = Pizzas(reference, description, type, priceWithoutTax, priceWithTax)
 
             CoroutineScope(Dispatchers.IO).launch {
@@ -73,7 +72,9 @@ class addPizza : AppCompatActivity() {
 
                 database.pizzaDao().insertPizza(pizza)
                 runOnUiThread {
-                    val resultIntent = Intent()
+                    val resultIntent = Intent().apply {
+                        putExtra("NEW_PIZZA", pizza)
+                    }
                     setResult(Activity.RESULT_OK, resultIntent)
                     finish()
                 }

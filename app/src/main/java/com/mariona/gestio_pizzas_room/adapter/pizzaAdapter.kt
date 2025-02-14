@@ -62,8 +62,6 @@ class pizzaAdapter(
             notifyItemRemoved(position)
             onDelete(removedPizza) // Llama al callback para eliminarla de Room
         }
-
-
     }
 
     fun updatePizzas(newPizzasList: List<Pizzas>) {

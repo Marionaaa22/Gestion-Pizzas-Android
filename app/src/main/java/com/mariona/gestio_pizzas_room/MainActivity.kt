@@ -123,6 +123,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == ADD_PIZZA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            lifecycleScope.launch {
+                loadPizzasFromDatabase()  // Recargar la lista después de agregar
+            }
+        }
+
         if (requestCode == EDIT_PIZZA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val updatedPizza = data?.getSerializableExtra("UPDATED_PIZZA") as? Pizzas
             updatedPizza?.let { updatedPizzaItem ->
@@ -134,13 +141,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private suspend fun loadPizzasFromDatabase() {
         val pizzasFromDb = withContext(Dispatchers.IO) {
             database.pizzaDao().getAllPizzas()
         }
         pizzaList.clear()
         pizzaList.addAll(pizzasFromDb)
-        adapter.notifyDataSetChanged()
+
+        withContext(Dispatchers.Main) {
+            adapter.notifyDataSetChanged()  // Notificar cambios en el hilo principal
+        }
     }
 
     private fun filterPizzasByType(type: String) {

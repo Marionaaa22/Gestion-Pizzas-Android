@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
@@ -40,6 +41,8 @@ class editarPizzas : AppCompatActivity() {
         val tvReferencia = findViewById<TextView>(R.id.tv_reference)
         val etDescripcio = findViewById<EditText>(R.id.editarDescripcion)
         val etPreu = findViewById<EditText>(R.id.editarIva)
+        val etTipo = findViewById<Spinner>(R.id.spinnerTipo)
+        val etReferencia = findViewById<EditText>(R.id.editarReferencia)
         val btnGuardar = findViewById<Button>(R.id.btnGuardarEditar)
 
         pizza?.let {
@@ -50,10 +53,22 @@ class editarPizzas : AppCompatActivity() {
             btnGuardar.setOnClickListener {
                 val novaDescripcio = etDescripcio.text.toString()
                 val nouPreu = etPreu.text.toString().toDoubleOrNull()
+                val nouReferencia = etReferencia.text.toString()
+                val nouTipo = etTipo.selectedItem.toString()
 
                 if (nouPreu != null) {
                     val tipusIva = sharedPreferences.getFloat("tipusIva", 21f)
                     val nouPreuIVA = nouPreu * (1 + tipusIva / 100)
+
+                    val prefix = when (nouTipo) {
+                        "PIZZA" -> "PI"
+                        "PIZZA VEGANA" -> "PV"
+                        "PIZZA CELIACA" -> "PC"
+                        "TOPPING" -> "TO"
+                        else -> null
+                    }
+
+
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val pizzaActualitzada = Pizzas(

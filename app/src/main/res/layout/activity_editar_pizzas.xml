@@ -47,10 +47,10 @@
         android:id="@+id/btnGuardarEditar"
         android:layout_width="384dp"
         android:layout_height="69dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="236dp"
         android:text="Guardar cambios"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline12" />
 
@@ -74,5 +74,37 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="309dp" />
+
+    <Spinner
+        android:id="@+id/spinnerTipo"
+        android:layout_width="403dp"
+        android:layout_height="65dp"
+        android:entries="@array/pizza_types"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.375"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.523" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="409dp"
+        android:entries="@array/pizza_types"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="422dp">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editarReferencia"
+        android:layout_width="382dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="39dp"
+        android:hint="Referencia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTipo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val ADD_PIZZA_REQUEST_CODE = 1
         const val EDIT_PIZZA_REQUEST_CODE = 2
+        const val CONFIGURACION_IVA_REQUEST_CODE = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,20 +125,13 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == ADD_PIZZA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            lifecycleScope.launch {
-                loadPizzasFromDatabase()  // Recargar la lista después de agregar
-            }
-        }
-
-        if (requestCode == EDIT_PIZZA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val updatedPizza = data?.getSerializableExtra("UPDATED_PIZZA") as? Pizzas
-            updatedPizza?.let { updatedPizzaItem ->
-                pizzaList.indexOfFirst { it.referencia == updatedPizzaItem.referencia }
-                    .takeIf { it >= 0 }?.let { index ->
-                        pizzaList[index] = updatedPizzaItem
-                        adapter.updatePizzas(pizzaList)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                ADD_PIZZA_REQUEST_CODE, EDIT_PIZZA_REQUEST_CODE, CONFIGURACION_IVA_REQUEST_CODE -> {
+                    lifecycleScope.launch {
+                        loadPizzasFromDatabase()
                     }
+                }
             }
         }
     }
@@ -148,12 +142,10 @@ class MainActivity : AppCompatActivity() {
         }
         pizzaList.clear()
         pizzaList.addAll(pizzasFromDb)
-
         withContext(Dispatchers.Main) {
-            adapter.notifyDataSetChanged()  // Notificar cambios en el hilo principal
+            adapter.notifyDataSetChanged()
         }
     }
-
     private fun filterPizzasByType(type: String) {
         lifecycleScope.launch {
             val filteredPizzas = withContext(Dispatchers.IO) {
@@ -209,6 +201,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, editarPizzas::class.java).apply {
             putExtra("PIZZA", pizza)
         }
-        startActivity(intent)
+        startActivityForResult(intent, EDIT_PIZZA_REQUEST_CODE)
     }
 }

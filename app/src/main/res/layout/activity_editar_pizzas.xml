@@ -49,6 +49,7 @@
         android:layout_height="69dp"
         android:layout_marginTop="236dp"
         android:text="Guardar cambios"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,9 +103,13 @@
         android:layout_width="382dp"
         android:layout_height="61dp"
         android:layout_marginTop="39dp"
+        android:layout_marginBottom="91dp"
         android:hint="Referencia"
+        app:layout_constraintBottom_toTopOf="@+id/btnGuardarEditar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerTipo" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTipo"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

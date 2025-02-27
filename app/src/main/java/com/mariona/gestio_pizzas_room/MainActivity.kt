@@ -102,13 +102,13 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.mOrdenarAZ -> {
-                pizzaList.sortBy { it.referencia }
+                pizzaList.sortBy { it.descripcion }
                 adapter.notifyDataSetChanged()
                 return true
             }
 
             R.id.mOrdenarZA -> {
-                pizzaList.sortBy { it.precio }
+                pizzaList.sortBy { it.descripcion }
                 adapter.notifyDataSetChanged()
                 return true
             }
@@ -128,6 +128,7 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 ADD_PIZZA_REQUEST_CODE, EDIT_PIZZA_REQUEST_CODE, CONFIGURACION_IVA_REQUEST_CODE -> {
+                    // Llama a loadPizzasFromDatabase para actualizar los precios
                     lifecycleScope.launch {
                         loadPizzasFromDatabase()
                     }
@@ -141,11 +142,14 @@ class MainActivity : AppCompatActivity() {
             database.pizzaDao().getAllPizzas()
         }
         pizzaList.clear()
-        pizzaList.addAll(pizzasFromDb)
+        pizzaList.addAll(pizzasFromDb) // Asegúrate de que pizzaList tenga las pizzas actualizadas con los nuevos precios.
+
+        // Notifica al adaptador que los datos han cambiado
         withContext(Dispatchers.Main) {
             adapter.notifyDataSetChanged()
         }
     }
+
     private fun filterPizzasByType(type: String) {
         lifecycleScope.launch {
             val filteredPizzas = withContext(Dispatchers.IO) {
